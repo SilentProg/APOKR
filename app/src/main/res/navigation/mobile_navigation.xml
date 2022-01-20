@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.savonikyurii.beatifulkrivbas.ui.home.HomeFragment"
+        android:label="@string/main"
+        tools:layout="@layout/fragment_home" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_map"
+        android:name="com.savonikyurii.beatifulkrivbas.ui.map.MapFragment"
+        android:label="@string/menu_map"
+        tools:layout="@layout/fragment_map" />
+
+    <fragment
+        android:id="@+id/nav_catalog"
+        android:name="com.savonikyurii.beatifulkrivbas.ui.catalog.CatalogFragment"
+        android:label="@string/catalog"
+        tools:layout="@layout/fragment_catalog" />
+    <fragment
+        android:id="@+id/nav_history"
+        android:name="com.savonikyurii.beatifulkrivbas.ui.history.HistoryFragment"
+        android:label="@string/history"
+        tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/nav_list"
+        android:name="com.savonikyurii.beatifulkrivbas.ui.list.ListFragment"
+        android:label="@string/list"
+        tools:layout="@layout/fragment_list" />
+    <fragment
+        android:id="@+id/nav_details"
+        android:name="com.savonikyurii.beatifulkrivbas.ui.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" />
+    <fragment
+        android:id="@+id/nav_imagedetails"
+        android:name="com.savonikyurii.beatifulkrivbas.ui.DetailsImageFragment"
+        android:label="fragment_details_image"
+        tools:layout="@layout/fragment_details_image" />
+
+</navigation>

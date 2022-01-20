@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">ProjectMap</string>
+    <string name="loading">Loading...</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="sing_in">Sing in</string>
+    <string name="sing_up">Sing up</string>
+    <string name="sing_up_underline"><u>Sing up</u></string>
+    <string name="forgotpass"><u>Forgot your password?</u></string>
+    <string name="email">E-mail</string>
+    <string name="confirm_pass">Confirm password</string>
+    <string name="back">Back</string>
+    <string name="restore">Restore</string>
+    <string name="send">Send again</string>
+    <string name="code">Code</string>
+    <string name="password_recovery">Password recovery</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_map">Map</string>
+    <string name="title_activity_maps">Map</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="catalog">Catalog</string>
+    <string name="main">Main</string>
+    <string name="history">History</string>
+    <string name="username">User:</string>
+    <string name="date_of_registration">Date of registration</string>
+    <string name="last_visited">Last visited place</string>
+    <string name="number_of_places_visited">Number of places visited:</string>
+    <string name="place_title">Place title</string>
+    <string name="title">Title:</string>
+    <string name="date">Date:</string>
+    <string name="category">Category:</string>
+    <string name="place_category">Place category</string>
+    <string name="small_description">Small description:</string>
+    <string name="current_destination">Current destination</string>
+    <string name="all_places">All places</string>
+    <string name="list">List</string>
+    <string name="details">Details</string>
+    <string name="login_error">Email or Password input incorrect!</string>
+    <string name="email_error">Email Error!</string>
+    <string name="password_error">Password error!</string>
+    <string name="logout">Log out</string>
+    <string name="logout_message">Are you sure you want to log out?</string>
+    <string name="mesage_exit_but_can">Cancel</string>
+    <string name="mesage_exit_but_sub">LOGOUT</string>
+    <string name="hello">Hello</string>
+    <string name="not_login">You have not entered login!</string>
+    <string name="not_email">You have not entered email!</string>
+    <string name="not_password">You have not entered password!</string>
+    <string name="not_confirmpassword">You did not confirm your password!</string>
+    <string name="password_mismatch">Password mismatch!</string>
+    <string name="select_a_category">Select a category:</string>
+    <string name="cultural_heritage_category">Cultural heritage</string>
+    <string name="historical_heritage_category">Historical heritage</string>
+    <string name="quarry_category">Quarry</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

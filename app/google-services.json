@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "461325510770",
+    "firebase_url": "https://mapsexample-65609-default-rtdb.firebaseio.com",
+    "project_id": "mapsexample-65609",
+    "storage_bucket": "mapsexample-65609.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461325510770:android:cc1a1748a7d996ca5b7aeb",
+        "android_client_info": {
+          "package_name": "com.example.mapsexample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "461325510770-5bn2so163v24dup321s2dpi4hvnie3d7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALrmxwNDUQTnkWRfFn_6NbKWzDpYQe7ns"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "461325510770-5bn2so163v24dup321s2dpi4hvnie3d7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461325510770:android:9f471aabfeb060705b7aeb",
+        "android_client_info": {
+          "package_name": "com.savonikyurii.beatifulkrivbas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "461325510770-5bn2so163v24dup321s2dpi4hvnie3d7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALrmxwNDUQTnkWRfFn_6NbKWzDpYQe7ns"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "461325510770-5bn2so163v24dup321s2dpi4hvnie3d7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.HomeFragment"
+    >
+
+    <!--
+    Список все точек маршрута
+    -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            android:id="@+id/userinfo_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/label_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/username"
+                    android:textSize="12pt"
+                    app:layout_constraintEnd_toStartOf="@id/username"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/username"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:paddingStart="5dp"
+                    android:text="......"
+                    android:textAlignment="viewEnd"
+                    android:textSize="12pt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/label_username"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/count_places"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/number_of_places_visited"
+                    android:textSize="10pt"
+                    app:layout_constraintTop_toBottomOf="@id/label_username"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/number_of_visited_places"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:paddingStart="5dp"
+                    android:text="0000"
+                    android:textAlignment="viewEnd"
+                    android:textSize="10pt"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/count_places"
+                    app:layout_constraintTop_toBottomOf="@+id/username" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            android:id="@+id/lastplace_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/current_container">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                >
+
+                <TextView
+                    android:id="@+id/label_lastvisited"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/last_visited"
+                    android:textAlignment="center"
+                    android:textSize="12pt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/image_lastplace"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/logotemp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_lastvisited" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/label_placetitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:text="@string/title"
+                    android:textSize="9pt"
+                    app:layout_constraintEnd_toStartOf="@id/place_tiltle_last"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toEndOf="@id/image_lastplace"
+                    app:layout_constraintTop_toBottomOf="@id/label_lastvisited" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/place_tiltle_last"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:text="@string/place_title"
+                    android:textSize="9pt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toEndOf="@id/label_placetitle"
+                    app:layout_constraintTop_toBottomOf="@id/label_lastvisited" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/label_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:text="@string/category"
+                    android:textSize="9pt"
+                    app:layout_constraintEnd_toStartOf="@id/place_category"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toEndOf="@id/image_lastplace"
+                    app:layout_constraintTop_toBottomOf="@id/label_placetitle" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/place_category"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:text="@string/place_category"
+                    android:textSize="9pt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toEndOf="@id/label_category"
+                    app:layout_constraintTop_toBottomOf="@id/label_placetitle" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/label_description_last"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/small_description"
+                    android:textSize="9pt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/image_lastplace" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/description_last"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:paddingTop="5dp"
+                    android:text="weather clear weather clear weather clear weather clear weather clear weather clear weather clear weather clear"
+                    android:textSize="6pt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_description_last" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDetailsLastDestinationDestination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Details"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/description_last" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/current_container"
+            app:layout_constraintTop_toBottomOf="@id/userinfo_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            >
+
+            <TextView
+                android:id="@+id/label_current"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:padding="5dp"
+                android:text="@string/current_destination"
+                android:textAlignment="center"
+                android:textSize="12pt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/image_currentplace"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/logotemp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/label_current" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/label_currentplacetitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/label_current"
+                app:layout_constraintStart_toEndOf="@id/image_currentplace"
+                app:layout_constraintEnd_toStartOf="@id/place_tiltle_current"
+                app:layout_constraintHorizontal_bias="0"
+                android:paddingStart="5dp"
+                android:textSize="9pt"
+                android:text="@string/title"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/place_tiltle_current"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:text="@string/place_title"
+                android:textSize="9pt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/label_currentplacetitle"
+                app:layout_constraintTop_toBottomOf="@id/label_current" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/label_currentcategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/label_currentplacetitle"
+                app:layout_constraintStart_toEndOf="@id/image_currentplace"
+                app:layout_constraintEnd_toStartOf="@id/place_category_current"
+                app:layout_constraintHorizontal_bias="0"
+                android:paddingStart="5dp"
+                android:textSize="9pt"
+                android:text="@string/category"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/place_category_current"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:text="@string/place_category"
+                android:textSize="9pt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@id/label_currentcategory"
+                app:layout_constraintTop_toBottomOf="@id/place_tiltle_current" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/label_description_current"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/small_description"
+                android:textSize="9pt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_currentplace" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/description_current"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:paddingTop="5dp"
+                android:text="weather clear weather clear weather clear weather clear weather clear weather clear weather clear weather clear"
+                android:textSize="6pt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/label_description_current" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAllPlaceInCurrentDestination"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Details"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description_current" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
