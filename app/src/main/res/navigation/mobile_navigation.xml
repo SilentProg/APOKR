@@ -36,12 +36,12 @@
     <fragment
         android:id="@+id/nav_details"
         android:name="com.savonikyurii.beatifulkrivbas.ui.DetailsFragment"
-        android:label="fragment_details"
+        android:label="@string/details_withouttwodots"
         tools:layout="@layout/fragment_details" />
     <fragment
         android:id="@+id/nav_imagedetails"
+        android:label="@string/details_withouttwodots"
         android:name="com.savonikyurii.beatifulkrivbas.ui.DetailsImageFragment"
-        android:label="fragment_details_image"
         tools:layout="@layout/fragment_details_image" />
 
 </navigation>

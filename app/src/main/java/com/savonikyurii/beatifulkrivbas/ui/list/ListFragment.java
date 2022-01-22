@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListFragment extends Fragment {
+    public static Place place;
     private RecyclerView list;
     private List<Place> all_places;
     private List<Place> list_of_cultural;
@@ -58,7 +59,7 @@ public class ListFragment extends Fragment {
         list_of_cultural = new ArrayList<>();
         list_of_quarry = new ArrayList<>();
         mRefData = FirebaseDatabase.getInstance().getReference();
-        adapter = new ListAllAdapter(getActivity(), all_places);
+        adapter = new ListAllAdapter(getActivity(), all_places, this);
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -68,50 +69,17 @@ public class ListFragment extends Fragment {
     private void ReadData(){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         DataBaseHelper helper = new DataBaseHelper(ref);
-//        ref.child("places").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                list_of_quarry.addAll(helper.getAllFromQuarry());
-//                list_of_cultural.addAll(helper.getAllFromCultural());
-//                System.out.println("size list of quarry: "+list_of_quarry.size());
-//                System.out.println("size list of cultural: "+list_of_cultural.size());
-//                updateUI();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-
-
-        mRefData.child("places").child(Categories.NaturalObjects).addValueEventListener(new ValueEventListener() {
-
+        mRefData.child("places").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(list_of_quarry.size()>0)list_of_quarry.clear();
-                for (DataSnapshot ds:snapshot.getChildren()) {
-                    Place place = ds.getValue(Place.class);
-                    assert place != null;
-                    list_of_quarry.add(place);
-                    updateUI();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        mRefData.child("places").child(Categories.HistoricalObjects).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(list_of_cultural.size()>0)list_of_cultural.clear();
-                for (DataSnapshot ds:snapshot.getChildren()) {
-                    Place place = ds.getValue(Place.class);
-                    assert place != null;
-                    list_of_cultural.add(place);
-                    updateUI();
+                if (all_places.size()>0) all_places.clear();
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    for (DataSnapshot data: ds.getChildren()){
+                        Place place = data.getValue(Place.class);
+                        assert place != null;
+                        all_places.add(place);
+                        updateUI();
+                    }
                 }
             }
 
@@ -123,9 +91,6 @@ public class ListFragment extends Fragment {
     }
 
     private void updateUI() {
-        all_places.clear();
-        all_places.addAll(list_of_cultural);
-        all_places.addAll(list_of_quarry);
         adapter.notifyDataSetChanged();
     }
 

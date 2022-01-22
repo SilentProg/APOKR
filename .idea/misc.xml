@@ -4,9 +4,18 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout-land/fragment_catalog.xml" value="0.18606701940035272" />
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout-land/fragment_home.xml" value="0.29541446208112876" />
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/activity_main.xml" value="0.2916666666666667" />
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/content_main.xml" value="0.2916666666666667" />
         <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/fragment_catalog.xml" value="0.333786231884058" />
-        <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/fragment_details_image.xml" value="0.34148550724637683" />
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/fragment_details.xml" value="0.33" />
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/fragment_details_image.xml" value="0.33" />
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/fragment_home.xml" value="0.333786231884058" />
         <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/list_all_item.xml" value="0.21979166666666666" />
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/logout_dialog.xml" value="0.2916666666666667" />
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/nav_header_main.xml" value="0.2916666666666667" />
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/menu/activity_main_drawer.xml" value="0.3489583333333333" />
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/menu/main.xml" value="0.3489583333333333" />
       </map>
     </option>
   </component>

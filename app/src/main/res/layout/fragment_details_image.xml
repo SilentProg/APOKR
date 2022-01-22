@@ -7,14 +7,31 @@
     android:layout_height="match_parent"
     tools:context=".ui.DetailsImageFragment">
 
+
     <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
+        android:id="@+id/image_blur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/fonbigtest"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:alpha="0.4"
+        />
+
+    <ImageView
+        android:id="@+id/image_main"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         android:src="@drawable/fonbigtest"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

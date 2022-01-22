@@ -9,10 +9,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.helpers.Place;
+import com.savonikyurii.beatifulkrivbas.ui.DetailsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -20,6 +23,13 @@ import java.util.List;
 public class ListAllAdapter extends RecyclerView.Adapter<ListAllAdapter.ListAllViewHolder> {
     private List<Place> list;
     private Context context;
+    private ListFragment fragment;
+
+    public ListAllAdapter(Context ct, List<Place> list_of_place, ListFragment fragment){
+        this.context = ct;
+        this.list = list_of_place;
+        this.fragment = fragment;
+    }
 
     public ListAllAdapter(Context ct, List<Place> list_of_place){
         this.context = ct;
@@ -40,6 +50,13 @@ public class ListAllAdapter extends RecyclerView.Adapter<ListAllAdapter.ListAllV
         holder.title.setText(list.get(position).getTitle());
         holder.category.setText(list.get(position).getCategory());
         Picasso.get().load(list.get(position).getImageuri()).into(holder.image);
+        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DetailsFragment.place = list.get(position);
+                NavHostFragment.findNavController(fragment).navigate(R.id.nav_details);
+            }
+        });
     }
 
     @Override

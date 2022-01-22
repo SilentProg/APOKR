@@ -22,26 +22,34 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLogout"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_margin="16dp"
-            android:padding="10dp"
-            android:layout_height="wrap_content"
-            android:text="@string/logout"
-            android:layout_gravity="bottom"
-            android:textAllCaps="true"
-            android:textColor="@color/teal_700"
-            app:strokeColor="@color/teal_700"
-            app:backgroundTint="@color/teal_200"
-            app:iconGravity="start"
-            app:icon="@drawable/ic_logout"
-            app:iconTint="@color/design_default_color_primary"
-            app:cornerRadius="7dp"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            />
+            android:layout_height="match_parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_margin="16dp"
+                android:padding="10dp"
+                android:layout_height="wrap_content"
+                android:text="@string/logout"
+                android:layout_gravity="bottom"
+                android:textAllCaps="true"
+                android:textColor="@color/teal_700"
+                app:strokeColor="@color/teal_700"
+                app:backgroundTint="@color/teal_200"
+                app:iconGravity="start"
+                app:icon="@drawable/ic_logout"
+                app:iconTint="@color/design_default_color_primary"
+                app:cornerRadius="7dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
