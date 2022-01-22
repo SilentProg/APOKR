@@ -5,7 +5,11 @@ import android.content.res.Resources;
 import com.savonikyurii.beatifulkrivbas.R;
 
 public class Categories {
-    public static final String CULTURAL_HERITAGE = "Cultural heritage";//Resources.getSystem().getString(R.string.cultural_heritage_category);
-    public static final String HISTORICAL_HERITAGE = "Historical heritage";//Resources.getSystem().getString(R.string.historical_heritage_category);
-    public static final String QUARRY = "Quarry";//Resources.getSystem().getString(R.string.quarry_category);
+    public static final String MilitaryPatriotic = "Military patriotic";
+    public static final String CulturalObjects = "Cultural objects";
+    public static final String ReligiousObjects = "Religious objects";
+    public static final String HistoricalObjects = "Historical objects";
+    public static final String ArchitecturalObjects = "Architectural objects";
+    public static final String NaturalObjects = "Natural objects";
+    public static final String UrbanObjects = "Urban objects";
 }

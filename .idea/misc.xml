@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout-land/fragment_catalog.xml" value="0.18606701940035272" />
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/fragment_catalog.xml" value="0.333786231884058" />
         <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/fragment_details_image.xml" value="0.34148550724637683" />
+        <entry key="..\:/BeatifulKrivbas/app/src/main/res/layout/list_all_item.xml" value="0.21979166666666666" />
       </map>
     </option>
   </component>

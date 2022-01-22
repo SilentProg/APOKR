@@ -59,9 +59,12 @@
     <string name="not_confirmpassword">You did not confirm your password!</string>
     <string name="password_mismatch">Password mismatch!</string>
     <string name="select_a_category">Select a category:</string>
-    <string name="cultural_heritage_category">Cultural heritage</string>
-    <string name="historical_heritage_category">Historical heritage</string>
-    <string name="quarry_category">Quarry</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="category_militaryPatriotic">Military patriotic</string>
+    <string name="category_culturalObjects">Cultural objects</string>
+    <string name="category_religiousObjects">Religious objects</string>
+    <string name="category_historicalObjects">Historical objects</string>
+    <string name="category_architecturalObjects">Architectural objects</string>
+    <string name="category_naturalObjects">Natural objects</string>
+    <string name="category_urbanObjects">Urban objects</string>
+    <string name="category_otherObjects">Other objects</string>
 </resources>

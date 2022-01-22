@@ -85,7 +85,7 @@ public class ListFragment extends Fragment {
 //        });
 
 
-        mRefData.child("places").child(Categories.QUARRY).addValueEventListener(new ValueEventListener() {
+        mRefData.child("places").child(Categories.NaturalObjects).addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -103,7 +103,7 @@ public class ListFragment extends Fragment {
 
             }
         });
-        mRefData.child("places").child(Categories.CULTURAL_HERITAGE).addValueEventListener(new ValueEventListener() {
+        mRefData.child("places").child(Categories.HistoricalObjects).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(list_of_cultural.size()>0)list_of_cultural.clear();

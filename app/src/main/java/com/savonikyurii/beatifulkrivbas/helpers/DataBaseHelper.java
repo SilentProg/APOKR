@@ -44,7 +44,7 @@ public class DataBaseHelper {
     public List<Place> firstRead(){
         List<Place> list = new ArrayList<>();
         mRefData = FirebaseDatabase.getInstance().getReference();
-        mRefData.child("places").child(Categories.CULTURAL_HERITAGE).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        mRefData.child("places").child(Categories.HistoricalObjects).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if(task.isSuccessful()){
@@ -58,7 +58,7 @@ public class DataBaseHelper {
                 }
             }
         });
-        mRefData.child("places").child(Categories.QUARRY).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        mRefData.child("places").child(Categories.CulturalObjects).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if(task.isSuccessful()){
@@ -78,7 +78,7 @@ public class DataBaseHelper {
 
     public List<Place> getAllFromQuarry(){
         mRefData = FirebaseDatabase.getInstance().getReference();
-        mRefData.child("places").child(Categories.QUARRY).addValueEventListener(new ValueEventListener() {
+        mRefData.child("places").child(Categories.UrbanObjects).addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -101,7 +101,7 @@ public class DataBaseHelper {
     public List<Place> getAllFromCultural(){
         List<Place> list_of_cultural = new ArrayList<>();
         mRefData = FirebaseDatabase.getInstance().getReference();
-        mRefData.child("places").child(Categories.CULTURAL_HERITAGE).addValueEventListener(new ValueEventListener() {
+        mRefData.child("places").child(Categories.CulturalObjects).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(list_of_cultural.size()>0)list_of_cultural.clear();
