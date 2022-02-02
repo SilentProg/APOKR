@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.savonikyurii.beatifulkrivbas.helpers.User;
+import com.savonikyurii.beatifulkrivbas.ui.BottomSheetRoute;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
@@ -35,7 +37,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BottomSheetRoute.BottomSheetRouteListener{
 
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -160,7 +162,8 @@ public class MainActivity extends AppCompatActivity {
                 Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_list ||
                 Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_imagedetails ||
                 Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_details ||
-                Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_catalog
+                Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_catalog ||
+                Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_map
         ){
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -180,6 +183,21 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "Press once again to exit!", Toast.LENGTH_SHORT).show();
             }
             back_pressed = System.currentTimeMillis();
+        }
+    }
+
+    @Override
+    public void onButtonClicked(int id) {
+        switch (id){
+            case R.id.btnBottomSheetStart:
+                break;
+            case R.id.btnBottomSheetWholeRoute:
+                break;
+            case R.id.btnBottomSheetReturnToList:
+                Navigation.findNavController(this,R.id.nav_host_fragment).navigateUp();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + id);
         }
     }
 

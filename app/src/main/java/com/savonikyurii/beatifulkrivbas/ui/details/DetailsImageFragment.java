@@ -1,4 +1,4 @@
-package com.savonikyurii.beatifulkrivbas.ui;
+package com.savonikyurii.beatifulkrivbas.ui.details;
 
 import android.os.Bundle;
 

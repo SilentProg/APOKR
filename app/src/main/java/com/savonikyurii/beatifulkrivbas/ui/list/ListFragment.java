@@ -1,15 +1,20 @@
 package com.savonikyurii.beatifulkrivbas.ui.list;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -32,49 +37,93 @@ public class ListFragment extends Fragment {
     public static Place place;
     private RecyclerView list;
     private List<Place> all_places;
-    private List<Place> list_of_cultural;
-    private List<Place> list_of_quarry;
     private DatabaseReference mRefData;
-    private FirebaseAuth mAuth;
-    private FirebaseUser user;
     private ListAllAdapter adapter;
+    private CardView cardEmpty;
+    private Button btnReturnToCatalog;
+    public static String category = Categories.AllObjects;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_list, container, false);
         init(root);
-        ReadData();
-        //all_places = DataBaseHelper.getAllFromQuarry();
-        //updateUI();
 
+        ReadData(category);
 
         return root;
     }
 
+
     private void init(View root){
         list = root.findViewById(R.id.list);
+        btnReturnToCatalog = (Button)root.findViewById(R.id.btnReturnToCatalog);
         all_places = new ArrayList<>();
-        list_of_cultural = new ArrayList<>();
-        list_of_quarry = new ArrayList<>();
+        cardEmpty = root.findViewById(R.id.card_list_empty);
         mRefData = FirebaseDatabase.getInstance().getReference();
         adapter = new ListAllAdapter(getActivity(), all_places, this);
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        btnReturnToCatalog.setOnClickListener(view -> {
+            NavHostFragment.findNavController(this).navigateUp();
+        });
         //all_places.add(new Place("Гданцевский парк", "Центрально-Міський район, Кривий Ріг, 50000", "https://99px.ru/sstorage/53/2015/11/tmb_150152_4865.jpg", Categories.CULTURAL_HERITAGE, "none", "none", 47.89788844983029, 33.33293223353166));
     }
 
-    private void ReadData(){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DataBaseHelper helper = new DataBaseHelper(ref);
+    private void ReadData(String category){
+        if (category.equals(Categories.AllObjects)) {
+            ReadAll();
+        }else if (category.equals(Categories.MilitaryPatriotic)){
+            ReadAllCategory(Categories.MilitaryPatriotic);
+        }else if (category.equals(Categories.CulturalObjects)){
+            ReadAllCategory(Categories.CulturalObjects);
+        }else if (category.equals(Categories.ReligiousObjects)){
+            ReadAllCategory(Categories.ReligiousObjects);
+        }else if (category.equals(Categories.HistoricalObjects)){
+            ReadAllCategory(Categories.HistoricalObjects);
+        }else if (category.equals(Categories.ArchitecturalObjects)){
+            ReadAllCategory(Categories.ArchitecturalObjects);
+        }else if (category.equals((Categories.NaturalObjects))){
+            ReadAllCategory(Categories.NaturalObjects);
+        }else if (category.equals(Categories.UrbanObjects)){
+            ReadAllCategory(Categories.UrbanObjects);
+        }else{
+            ReadAllCategory(Categories.OtherObjects);
+        }
+
+
+    }
+
+    private void ReadAllCategory(String category){
+        mRefData.child("places").child(category).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (all_places.size() > 0) all_places.clear();
+                if (!snapshot.hasChildren()) cardEmpty.setVisibility(View.VISIBLE);
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Place place = ds.getValue(Place.class);
+                    assert place != null;
+                    all_places.add(place);
+                    updateUI();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void ReadAll(){
         mRefData.child("places").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (all_places.size()>0) all_places.clear();
-                for (DataSnapshot ds: snapshot.getChildren()){
-                    for (DataSnapshot data: ds.getChildren()){
+                if (all_places.size() > 0) all_places.clear();
+                if (!snapshot.hasChildren()) cardEmpty.setVisibility(View.VISIBLE);
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    for (DataSnapshot data : ds.getChildren()) {
                         Place place = data.getValue(Place.class);
                         assert place != null;
                         all_places.add(place);
@@ -90,8 +139,10 @@ public class ListFragment extends Fragment {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void updateUI() {
         adapter.notifyDataSetChanged();
     }
+
 
 }

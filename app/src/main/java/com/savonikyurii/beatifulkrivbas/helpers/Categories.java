@@ -12,4 +12,6 @@ public class Categories {
     public static final String ArchitecturalObjects = "Architectural objects";
     public static final String NaturalObjects = "Natural objects";
     public static final String UrbanObjects = "Urban objects";
+    public static final String AllObjects = "All";
+    public static final String OtherObjects = "Other objects";
 }
