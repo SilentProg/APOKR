@@ -1,18 +1,27 @@
 package com.savonikyurii.beatifulkrivbas.ui.details;
 
+import android.annotation.SuppressLint;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentDetailsBinding;
 import com.savonikyurii.beatifulkrivbas.helpers.Place;
+import com.savonikyurii.beatifulkrivbas.helpers.Route;
 import com.savonikyurii.beatifulkrivbas.ui.BottomSheetRoute;
 import com.savonikyurii.beatifulkrivbas.ui.map.MapFragment;
 import com.squareup.picasso.Picasso;
@@ -60,8 +69,45 @@ public class DetailsFragment extends Fragment{
         NavHostFragment.findNavController(this).navigate(R.id.nav_map);
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void onClickAddToRoute(View view){
-        bottomSheetRoute = new BottomSheetRoute();
+        Route.addPlace(place);
+        bottomSheetRoute = new BottomSheetRoute(place);
         bottomSheetRoute.show(getActivity().getSupportFragmentManager(), "bottomSheet");
+
+//        BottomSheetDialog dialog = new BottomSheetDialog(getActivity(), R.style.BotomSheetDialogTheme);
+//        View d = LayoutInflater.from(getActivity().getApplicationContext())
+//                .inflate(
+//                        R.layout.bottomsheet_route,
+//                        (ConstraintLayout)binding.getRoot().findViewById(R.id.bottomSheetContainer)
+//                );
+//
+//        d.findViewById(R.id.bottomSheetContainer).setBackgroundResource(backgroundId());
+//        d.findViewById(R.id.btnBottomSheetStart).setOnClickListener(view1 -> {
+//            Toast.makeText(getActivity(), "Start", Toast.LENGTH_SHORT).show();
+//            dialog.dismiss();
+//        });
+//
+//        d.findViewById(R.id.btnBottomSheetWholeRoute).setOnClickListener(view1 -> {
+//            Toast.makeText(getActivity(), "Whole route", Toast.LENGTH_SHORT).show();
+//            dialog.dismiss();
+//        });
+//
+//        d.findViewById(R.id.btnBottomSheetReturnToList).setOnClickListener(view1 -> {
+//            NavHostFragment.findNavController(this).navigateUp();
+//            dialog.dismiss();
+//        });
+//
+//        dialog.setContentView(d);
+//        dialog.show();
+    }
+    private int backgroundId(){
+        int currentNightMode = getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO : return R.drawable.bottomsheetbackground;
+            case Configuration.UI_MODE_NIGHT_YES: return R.drawable.bottomsheetbackgrounddark;
+                default: return R.drawable.bottomsheetbackgrounddark;
+        }
     }
 }

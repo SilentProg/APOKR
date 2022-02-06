@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,9 +23,15 @@ import java.util.List;
 public class ListAllAdapter extends RecyclerView.Adapter<ListAllAdapter.ListAllViewHolder> {
     private List<Place> list;
     private Context context;
-    private ListFragment fragment;
+    private Fragment fragment;
 
     public ListAllAdapter(Context ct, List<Place> list_of_place, ListFragment fragment){
+        this.context = ct;
+        this.list = list_of_place;
+        this.fragment = (Fragment) fragment;
+    }
+
+    public ListAllAdapter(Context ct, List<Place> list_of_place, Fragment fragment){
         this.context = ct;
         this.list = list_of_place;
         this.fragment = fragment;

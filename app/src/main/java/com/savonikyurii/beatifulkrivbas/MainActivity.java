@@ -192,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
             case R.id.btnBottomSheetStart:
                 break;
             case R.id.btnBottomSheetWholeRoute:
+                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.nav_route);
                 break;
             case R.id.btnBottomSheetReturnToList:
                 Navigation.findNavController(this,R.id.nav_host_fragment).navigateUp();

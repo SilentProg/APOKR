@@ -13,12 +13,18 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.savonikyurii.beatifulkrivbas.R;
+import com.savonikyurii.beatifulkrivbas.helpers.Place;
 
 public class BottomSheetRoute extends BottomSheetDialogFragment {
     private BottomSheetRouteListener mListener;
     private Button btnReturn;
     private Button btnStart;
     private Button btnWholeRoute;
+    private Place place;
+
+    public BottomSheetRoute(Place p){
+        this.place = p;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

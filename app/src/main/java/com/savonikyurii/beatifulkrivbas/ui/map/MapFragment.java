@@ -56,10 +56,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }else{
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(47.91032835703162, 33.39146400501618), 10));
         }
-        // Add a marker in Sydney and move the camera
-/*        LatLng Vitaly = new LatLng(48.03264579820871, 33.482595351632625);
-        mMap.addMarker(new MarkerOptions().position(Vitaly).title("Привет Виталя!"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Vitaly, 18));*/
     }
 
     private void init(){
@@ -72,24 +68,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void initMarkers(){
        allMarkers = new ArrayList<>();
-       /* mRefData.child("places").child(Categories.NaturalObjects).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (allMarkers.size()>0) allMarkers.clear();
-                for (DataSnapshot ds: snapshot.getChildren()) {
-                    Place place = ds.getValue(Place.class);
-                    assert place != null;
-                    allMarkers.add(place);
-                    updateUI(allMarkers);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
-
         mRefData.child("places").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
