@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RouteFragment">
-    
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/routelist"
         android:layout_width="0dp"

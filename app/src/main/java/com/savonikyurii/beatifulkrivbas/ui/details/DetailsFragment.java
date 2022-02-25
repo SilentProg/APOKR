@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -18,6 +19,12 @@ import android.widget.Toast;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentDetailsBinding;
 import com.savonikyurii.beatifulkrivbas.helpers.Place;
@@ -30,6 +37,8 @@ public class DetailsFragment extends Fragment{
     private FragmentDetailsBinding binding;
     public static Place place;
     private BottomSheetRoute bottomSheetRoute;
+    private DatabaseReference mRedfData;
+    private FirebaseAuth mAuth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +53,6 @@ public class DetailsFragment extends Fragment{
             }
         });
 
-        initplace();
         init();
 
         return binding.getRoot();
@@ -53,6 +61,11 @@ public class DetailsFragment extends Fragment{
     private void init(){
         binding.btnViewOnMap.setOnClickListener(this::onClickMapView);
         binding.btnAddToRoute.setOnClickListener(this::onClickAddToRoute);
+
+        initplace();
+
+        mRedfData = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
     }
 
     private void initplace(){
@@ -69,9 +82,25 @@ public class DetailsFragment extends Fragment{
         NavHostFragment.findNavController(this).navigate(R.id.nav_map);
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     private void onClickAddToRoute(View view){
-        Route.addPlace(place);
+
+        mRedfData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.hasChildren()){
+                    mRedfData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").child(place.getTitle()).setValue(place);
+                }else{
+                    mRedfData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").child(place.getTitle()).setValue(place);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
         bottomSheetRoute = new BottomSheetRoute(place);
         bottomSheetRoute.show(getActivity().getSupportFragmentManager(), "bottomSheet");
 

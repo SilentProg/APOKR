@@ -7,23 +7,31 @@ public class Place implements Serializable{
     private String adres;
     private String imageuri;
     private String category;
-    private String smalldescription;
     private String bigdescription;
     private double latitude;
     private double longtude;
+    private int rate;
 
     public Place() {
     }
 
-    public Place(String title, String ad, String imuri, String category, String smalldescription, String bigdescription, double latitude, double longtude) {
+    public Place(String title, String ad, String imuri, String category, int rate, String bigdescription, double latitude, double longtude) {
         this.title = title;
         this.adres = ad;
+        this.rate = rate;
         this.imageuri = imuri;
         this.category = category;
-        this.smalldescription = smalldescription;
         this.bigdescription = bigdescription;
         this.latitude = latitude;
         this.longtude = longtude;
+    }
+
+    public int getRate() {
+        return rate;
+    }
+
+    public void setRate(int rate) {
+        this.rate = rate;
     }
 
     public String getTitle() {
@@ -40,14 +48,6 @@ public class Place implements Serializable{
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public String getSmalldescription() {
-        return smalldescription;
-    }
-
-    public void setSmalldescription(String smalldescription) {
-        this.smalldescription = smalldescription;
     }
 
     public String getBigdescription() {

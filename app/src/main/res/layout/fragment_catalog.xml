@@ -50,7 +50,7 @@
                         android:layout_height="100dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_baseline_history" />
+                        android:src="@drawable/icons8_dust_96px" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                         android:layout_height="100dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_baseline_history" />
+                        android:src="@drawable/icons8_military_base_96px" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
                         android:layout_height="100dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_baseline_history" />
+                        android:src="@drawable/icons8_theatre_stage_96px" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -162,7 +162,7 @@
                         android:layout_height="100dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_baseline_history" />
+                        android:src="@drawable/icons8_church_96px" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -199,7 +199,7 @@
                         android:layout_height="100dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_baseline_history" />
+                        android:src="@drawable/icons8_museum_96px" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -235,7 +235,7 @@
                         android:layout_height="100dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_baseline_history" />
+                        android:src="@drawable/icons8_ruins_96px" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -272,7 +272,7 @@
                         android:layout_height="100dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_baseline_history" />
+                        android:src="@drawable/icons8_natural_food_96px" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -309,7 +309,7 @@
                         android:layout_height="100dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_baseline_history" />
+                        android:src="@drawable/icons8_students_96px" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -345,7 +345,7 @@
                         android:layout_height="100dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_baseline_history" />
+                        android:src="@drawable/icons8_view_more_96px" />
 
                     <TextView
                         android:layout_width="wrap_content"

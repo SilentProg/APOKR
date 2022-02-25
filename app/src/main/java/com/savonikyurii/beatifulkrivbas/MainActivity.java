@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
     }
 
     private void onBtnLogoutClick(View view){
-        showBeautifulDialog(getString(R.string.logout),getString(R.string.logout_message));
+        showBeautifulDialog(getString(R.string.exit),getString(R.string.logout_message));
     }
 
     private void showBeautifulDialog(String title, String description){

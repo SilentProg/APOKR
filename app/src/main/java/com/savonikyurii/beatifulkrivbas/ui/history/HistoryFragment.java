@@ -34,7 +34,7 @@ public class HistoryFragment extends Fragment {
         list = root.findViewById(R.id.list_history);
         all_places = new ArrayList<>();
         String uri = "https://st2.depositphotos.com/1064024/10769/i/600/depositphotos_107694484-stock-photo-little-boy.jpg";
-        all_places.add(new Place("Гданцевский парк", "Центрально-Міський район, Кривий Ріг, 50000", uri, Categories.CulturalObjects, "none", "none", 47.89788844983029, 33.33293223353166));
+        all_places.add(new Place("Гданцевский парк", "Центрально-Міський район, Кривий Ріг, 50000", uri, Categories.CulturalObjects, (byte)3, "none", 47.89788844983029, 33.33293223353166));
 
         ListAllAdapter adapter = new ListAllAdapter(getActivity(), all_places,this);
         list.setAdapter(adapter);

@@ -50,13 +50,16 @@
                 app:layout_constraintStart_toStartOf="@+id/list_all_title"
                 app:layout_constraintTop_toBottomOf="@+id/list_all_title" />
 
-            <ImageView
+            <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/list_all_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_margin="10dp"
                 android:contentDescription="ListItemImage"
+                android:scaleType="fitXY"
+                app:riv_corner_radius="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="w,3:2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0"

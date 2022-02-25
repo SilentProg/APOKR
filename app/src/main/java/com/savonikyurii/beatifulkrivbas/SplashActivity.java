@@ -1,8 +1,11 @@
 package com.savonikyurii.beatifulkrivbas;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -28,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
         mRefData = FirebaseDatabase.getInstance().getReference();
 
         //DataBaseHelper.addNewPlace(new Place("gavno", "Кривий Ріг, Дніпропетровська область, 500000", "https://lh5.googleusercontent.com/p/AF1QipMArM0dHsE-7ynZUPhy6boe8ChSooitTquNO33E=w427-h240-k-no", Categories.CULTURAL_HERITAGE, "none", "none", 47.98853918814209, 33.463203869511624));
-        //DataBaseHelper.addNewPlace(new Place("Гданцевский парк", "Центрально-Міський район, Кривий Ріг, 50000", "https://99px.ru/sstorage/53/2015/11/tmb_150152_4865.jpg", Categories.NaturalObjects, "none", "none", 47.89788844983029, 33.33293223353166));
+        //mRefData.child("places").child(Categories.NaturalObjects).child("Гданцевский парк").setValue(new Place("Гданцевский парк", "Центрально-Міський район, Кривий Ріг, 50000", "https://99px.ru/sstorage/53/2015/11/tmb_150152_4865.jpg", Categories.NaturalObjects, "none", "Парк Гданцевский в Кривом Роге - это часть парка им. Ф. Мершавцева, которая находится за мостом в сторону Гданцевки. Здесть есть детская площадка, спортивная площадка, место для выгула собак, фонтанчик с питьевой водой, и много мест для отдыха с необычными скамейками.", 47.89788844983029, 33.33293223353166));
         //DataBaseHelper.addNewPlace(new Place("Східний водоспад", "Карачуны, 10, Кривий Ріг, Дніпропетровська область, 50000", "https://lh5.googleusercontent.com/p/AF1QipPRxgMuDxzmErlywfoRJIamaUkc-GVHttbieEcy=w408-h306-k-no", Categories.NaturalObjects, "none", "none", 47.906243711493445, 33.283804226854514));
 
         new Handler().postDelayed(new Runnable() {
@@ -39,5 +42,20 @@ public class SplashActivity extends AppCompatActivity {
             }
         },1000);
         //FirebaseAuth.getInstance().signOut();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (ActivityCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
     }
 }

@@ -131,13 +131,13 @@
                     android:paddingStart="5dp"
                     android:text="@string/title"
                     android:textSize="9pt"
-                    app:layout_constraintEnd_toStartOf="@id/place_tiltle_last"
+                    app:layout_constraintEnd_toStartOf="@id/place_title_last"
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toEndOf="@id/image_lastplace"
                     app:layout_constraintTop_toBottomOf="@id/label_lastvisited" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/place_tiltle_last"
+                    android:id="@+id/place_title_last"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:paddingStart="5dp"
@@ -188,12 +188,12 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/card_currentroute"
             app:cardUseCompatPadding="true"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/current_container"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/userinfo_container"
             app:layout_constraintStart_toStartOf="parent"
@@ -231,14 +231,14 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/label_current"
                 app:layout_constraintStart_toEndOf="@id/image_currentplace"
-                app:layout_constraintEnd_toStartOf="@id/place_tiltle_current"
+                app:layout_constraintEnd_toStartOf="@id/place_title_current"
                 app:layout_constraintHorizontal_bias="0"
                 android:paddingStart="5dp"
                 android:textSize="9pt"
                 android:text="@string/title"/>
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/place_tiltle_current"
+            <TextView
+                android:id="@+id/place_title_current"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingStart="5dp"
@@ -260,7 +260,7 @@
                 android:textSize="9pt"
                 android:text="@string/category"/>
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/place_category_current"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -270,7 +270,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@id/label_currentcategory"
-                app:layout_constraintTop_toBottomOf="@id/place_tiltle_current" />
+                app:layout_constraintTop_toBottomOf="@id/place_title_current" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAllPlaceInCurrentRoute"
@@ -302,12 +302,13 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/nothinghere"
+            android:id="@+id/card_nothinghere"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardUseCompatPadding="true"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/userinfo_container"
             >
 

@@ -56,6 +56,7 @@ public class ListAllAdapter extends RecyclerView.Adapter<ListAllAdapter.ListAllV
         holder.title.setText(list.get(position).getTitle());
         holder.category.setText(list.get(position).getCategory());
         Picasso.get().load(list.get(position).getImageuri()).into(holder.image);
+        //Picasso.get().load("https://image.tmdb.org/t/p/w500/qZCc1lty5FzX30aOCVRBLzaVmcp.png").into(holder.image);
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

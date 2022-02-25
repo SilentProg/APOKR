@@ -21,11 +21,16 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentHomeBinding;
+import com.savonikyurii.beatifulkrivbas.helpers.Place;
 import com.savonikyurii.beatifulkrivbas.helpers.User;
+import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
+import com.squareup.picasso.Picasso;
 
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
@@ -33,6 +38,7 @@ public class HomeFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private User userdata;
+    private Place currentDestination;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
@@ -47,9 +53,15 @@ public class HomeFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-        binding.btnGoToCatalog.setOnClickListener(this::onClickGoToCatalog);
-
         initUser();
+        initRoute();
+        initListeners();
+    }
+
+    private void initListeners(){
+        binding.btnGoToCatalog.setOnClickListener(this::onClickGoToCatalog);
+        binding.btnAllPlaceInCurrentRoute.setOnClickListener(this::onBtnWholeRouteClick);
+        binding.btnAboutDestination.setOnClickListener(this::onBtnAboutDestinationClick);
     }
 
     private void initUser(){
@@ -70,8 +82,44 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private void initRoute(){
+        mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChildren()) {
+                    binding.cardNothinghere.setVisibility(View.GONE);
+                    binding.cardCurrentroute.setVisibility(View.VISIBLE);
+                    for (DataSnapshot  ds: snapshot.getChildren()) {
+                        Place temp = ds.getValue(Place.class);
+
+                        Picasso.get().load(temp.getImageuri()).into(binding.imageCurrentplace);
+                        TextView title = binding.getRoot().findViewById(R.id.place_title_current);
+                        TextView category = binding.getRoot().findViewById(R.id.place_category_current);
+                        title.setText(temp.getTitle());
+                        category.setText(temp.getCategory());
+                        currentDestination = temp;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void onClickGoToCatalog(View view){
         NavHostFragment.findNavController(this).navigate(R.id.nav_catalog);
+    }
+
+    private void onBtnWholeRouteClick(View view){
+        NavHostFragment.findNavController(this).navigate(R.id.nav_route);
+    }
+
+    private void onBtnAboutDestinationClick(View view){
+        DetailsFragment.place = currentDestination;
+        NavHostFragment.findNavController(this).navigate(R.id.nav_details);
     }
 
 
