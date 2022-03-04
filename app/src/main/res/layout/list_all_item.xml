@@ -23,6 +23,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ProgressBar
+                android:id="@+id/progressBar3"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/list_all_image"
+                app:layout_constraintEnd_toEndOf="@id/list_all_image"
+                app:layout_constraintStart_toStartOf="@id/list_all_image"
+                app:layout_constraintTop_toTopOf="@id/list_all_image" />
+
             <TextView
                 android:id="@+id/list_all_title"
                 android:layout_width="wrap_content"
@@ -64,6 +74,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0"
                 app:srcCompat="@drawable/icon" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

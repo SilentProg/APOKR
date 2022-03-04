@@ -108,6 +108,8 @@ public class RouteFragment extends Fragment {
 
         //Toast.makeText(getActivity(), String.valueOf(Route.getRoute().size()), Toast.LENGTH_SHORT).show();
         Toast.makeText(getActivity(), String.valueOf(adapter.getItemCount()), Toast.LENGTH_SHORT).show();
+        if (adapter.getItemCount()>0) binding.routelist.setVisibility(View.VISIBLE);
+        else binding.routelist.setVisibility(View.GONE);
 
     }
 
@@ -136,16 +138,19 @@ public class RouteFragment extends Fragment {
     }
 
     private void onNextDestinationClick(View view){
-        List<Place> list = Route.getRoute();
-        if (list.size()>0){
-            initCurrentDestination(list.get(0));
-            mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").child(list.get(0).getTitle()).removeValue();
-            Route.getRoute().remove(0);
+        if (Route.getRoute().size()>0){
+            initCurrentDestination(Route.getRoute().get(0));
+            mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").child(Route.getRoute().get(0).getTitle()).removeValue();
+            if (Route.getRoute().size()==1){
+                Route.clear();
+                adapter.notifyDataSetChanged();
+                binding.routelist.setVisibility(View.GONE);
+            }
             mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.hasChildren()){
-                        if (Route.getRoute().size()>=0) Route.getRoute().clear();
+                        if (Route.getRoute().size()>0) Route.clear();
                         for (DataSnapshot ds: snapshot.getChildren()) {
                             Route.addPlace(ds.getValue(Place.class));
                         }

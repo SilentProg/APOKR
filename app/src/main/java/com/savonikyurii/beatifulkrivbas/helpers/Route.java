@@ -34,4 +34,8 @@ public class Route {
     public static void setCurrentDestination(Place currentDestination) {
         Route.currentDestination = currentDestination;
     }
+
+    public static void clear(){
+        list.clear();
+    }
 }

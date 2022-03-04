@@ -77,7 +77,7 @@
     <string name="start">Почати</string>
     <string name="return_to_list">Повернутися до списку</string>
     <string name="added_to_route">Додано</string>
-    <string name="nothing_here_yet">Поки що ту нічого немає</string>
+    <string name="nothing_here_yet">Поки що тут нічого немає</string>
     <string name="go_to_catalog">Перейти в каталог</string>
     <string name="password_reset_label">Лист з указівками було надіслано на вказану пошту!</string>
     <string name="ok">OK</string>
