@@ -1,8 +1,10 @@
 package com.savonikyurii.beatifulkrivbas;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -25,6 +27,7 @@ import com.savonikyurii.beatifulkrivbas.helpers.User;
 import com.savonikyurii.beatifulkrivbas.ui.BottomSheetRoute;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private User userdata;
+    private final int CODE_LOCATION = 45;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,30 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, CODE_LOCATION);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CODE_LOCATION){
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                Snackbar.make(btnLogout.getRootView(), "Деякі функції обмежено!", Snackbar.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void init(){

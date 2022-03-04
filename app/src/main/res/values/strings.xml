@@ -83,4 +83,12 @@
     <string name="ok">OK</string>
     <string name="return_to_catalog">Повернутися до каталогу</string>
     <string name="exit">Вихід</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete_from_history">Видалити з історії</string>
+    <string name="delete_ask">Ви впевнені що бажаєте видалити це місце з історії відвідування?</string>
+    <string name="delete_history">Видалення!</string>
+    <string name="yes">Так</string>
+    <string name="NO">НІ</string>
+    <string name="canceled">Виділення відмінено!</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.savonikyurii.beatifulkrivbas.ui.map;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -33,6 +36,7 @@ import com.google.maps.PendingResult;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
+import com.savonikyurii.beatifulkrivbas.MainActivity;
 import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentMapBinding;
 import com.savonikyurii.beatifulkrivbas.helpers.CustomInfoWindowGoogleMap;
@@ -76,7 +80,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         }
         CustomInfoWindowGoogleMap infoWindowGoogleMap = new CustomInfoWindowGoogleMap(getActivity());
         mMap.setInfoWindowAdapter(infoWindowGoogleMap);
-        //mMap.setMyLocationEnabled(true);
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            mMap.setMyLocationEnabled(true);
+        }
         //new FetchURL(getActivity()).execute(getUrl(new LatLng(48.014027997319744, 33.484797886699965), new LatLng(47.89591530085526, 33.33274639636037), "driving"), "driving");
        // new FetchURL(getActivity()).execute(getUrl(new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude()), new LatLng(47.89591530085526, 33.33274639636037), "driving"), "driving");
 

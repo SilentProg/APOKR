@@ -39,23 +39,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="5dp"
-                android:text="Название точки"
+                android:text="@string/place_title"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/deleteImg"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/list_all_image"
                 app:layout_constraintTop_toTopOf="@+id/list_all_image" />
 
             <TextView
                 android:id="@+id/list_all_category"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 android:text="категория"
                 android:textSize="16sp"
                 android:textStyle="normal"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/list_all_title"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/list_all_title"
                 app:layout_constraintTop_toBottomOf="@+id/list_all_title" />
@@ -74,6 +74,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0"
                 app:srcCompat="@drawable/icon" />
+
+            <ImageView
+                android:id="@+id/deleteImg"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/trashcan"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

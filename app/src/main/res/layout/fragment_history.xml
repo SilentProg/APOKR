@@ -7,12 +7,152 @@
     android:orientation="vertical"
     tools:context=".ui.history.HistoryFragment">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_nothinghere"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/label_nothing_here_yet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/btnGoToCatalog"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/nothing_here_yet"
+                android:textSize="25sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                />
+
+            <Button
+                android:id="@+id/btnGoToCatalog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/go_to_catalog"
+                app:layout_constraintTop_toBottomOf="@id/label_nothing_here_yet"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="16dp"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        android:id="@+id/lastplace_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            >
+
+            <TextView
+                android:id="@+id/label_lastvisited"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@string/last_visited"
+                android:textAlignment="center"
+                android:textSize="12pt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/progressBar4"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/image_lastplace"
+                app:layout_constraintEnd_toEndOf="@+id/image_lastplace"
+                app:layout_constraintStart_toStartOf="@+id/image_lastplace"
+                app:layout_constraintTop_toTopOf="@+id/image_lastplace" />
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/image_lastplace"
+                android:layout_width="78dp"
+                android:layout_height="77dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/label_lastvisited"
+                app:riv_corner_radius="8dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/label_placetitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:textStyle="bold"
+                android:text="@string/title"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toStartOf="@id/place_title_last"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@id/image_lastplace"
+                app:layout_constraintTop_toBottomOf="@id/label_lastvisited" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/place_title_last"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:text="@string/place_title"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:singleLine="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@id/label_placetitle"
+                app:layout_constraintTop_toBottomOf="@id/label_lastvisited" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDetailsLastDestinationDestination"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="@string/about_place"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/place_title_last"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_history"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/lastplace_container"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
