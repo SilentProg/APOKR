@@ -69,6 +69,7 @@ public class DetailsFragment extends Fragment{
     }
 
     private void initplace(){
+        if (place==null) return;
         binding.textTitle.setText(place.getTitle());
         binding.textCategory.setText(place.getCategory());
         binding.textAddress.setText(place.getAdres());
@@ -103,40 +104,5 @@ public class DetailsFragment extends Fragment{
 
         bottomSheetRoute = new BottomSheetRoute(place);
         bottomSheetRoute.show(getActivity().getSupportFragmentManager(), "bottomSheet");
-
-//        BottomSheetDialog dialog = new BottomSheetDialog(getActivity(), R.style.BotomSheetDialogTheme);
-//        View d = LayoutInflater.from(getActivity().getApplicationContext())
-//                .inflate(
-//                        R.layout.bottomsheet_route,
-//                        (ConstraintLayout)binding.getRoot().findViewById(R.id.bottomSheetContainer)
-//                );
-//
-//        d.findViewById(R.id.bottomSheetContainer).setBackgroundResource(backgroundId());
-//        d.findViewById(R.id.btnBottomSheetStart).setOnClickListener(view1 -> {
-//            Toast.makeText(getActivity(), "Start", Toast.LENGTH_SHORT).show();
-//            dialog.dismiss();
-//        });
-//
-//        d.findViewById(R.id.btnBottomSheetWholeRoute).setOnClickListener(view1 -> {
-//            Toast.makeText(getActivity(), "Whole route", Toast.LENGTH_SHORT).show();
-//            dialog.dismiss();
-//        });
-//
-//        d.findViewById(R.id.btnBottomSheetReturnToList).setOnClickListener(view1 -> {
-//            NavHostFragment.findNavController(this).navigateUp();
-//            dialog.dismiss();
-//        });
-//
-//        dialog.setContentView(d);
-//        dialog.show();
-    }
-    private int backgroundId(){
-        int currentNightMode = getResources().getConfiguration().uiMode
-                & Configuration.UI_MODE_NIGHT_MASK;
-        switch (currentNightMode) {
-            case Configuration.UI_MODE_NIGHT_NO : return R.drawable.bottomsheetbackground;
-            case Configuration.UI_MODE_NIGHT_YES: return R.drawable.bottomsheetbackgrounddark;
-                default: return R.drawable.bottomsheetbackgrounddark;
-        }
     }
 }

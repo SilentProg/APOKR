@@ -38,11 +38,10 @@ public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
         TextView category = view.findViewById(R.id.text_category_map);
         ImageView img = view.findViewById(R.id.image);
 
-        InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
+        Place infoWindowData = (Place) marker.getTag();
         title.setText(infoWindowData.getTitle());
         category.setText(infoWindowData.getCategory());
-        Picasso.get().load(infoWindowData.getImage()).into(img);
-        //Glide.with(view).load(infoWindowData.getImage()).into(img);
+        Picasso.get().load(infoWindowData.getImageuri()).placeholder(R.drawable.image_placeholder).into(img);
 
         return view;
     }

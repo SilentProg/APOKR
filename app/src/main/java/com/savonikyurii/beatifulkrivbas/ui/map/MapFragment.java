@@ -1,7 +1,5 @@
 package com.savonikyurii.beatifulkrivbas.ui.map;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,11 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,14 +35,12 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentMapBinding;
-import com.savonikyurii.beatifulkrivbas.helpers.Categories;
 import com.savonikyurii.beatifulkrivbas.helpers.CustomInfoWindowGoogleMap;
-import com.savonikyurii.beatifulkrivbas.helpers.InfoWindowData;
 import com.savonikyurii.beatifulkrivbas.helpers.Place;
+import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback{
@@ -86,6 +81,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
        // new FetchURL(getActivity()).execute(getUrl(new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude()), new LatLng(47.89591530085526, 33.33274639636037), "driving"), "driving");
 
         calculateDirections(new LatLng(47.999628693296565, 33.44792163717202),new LatLng(47.89591530085526, 33.33274639636037));
+
+        mMap.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
+            @Override
+            public void onInfoWindowLongClick(@NonNull Marker marker) {
+                Place info = (Place) marker.getTag();
+                Log.d("Info", info.toString());
+                Log.d("Map", "Click");
+                InfoWindowClick(info);
+            }
+        });
     }
 
 
@@ -198,8 +203,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             LatLng temp = new LatLng(place.getLatitude(), place.getLongtude());
             MarkerOptions marker = new MarkerOptions().position(temp);
             Marker m = mMap.addMarker(marker);
-            m.setTag(new InfoWindowData(place.getTitle(),place.getImageuri(), place.getCategory()));
-
+            m.setTag(place);
         }
+    }
+
+    private void InfoWindowClick(Place place){
+        Log.d("place", place.toString());
+        DetailsFragment.place = place;
+        NavHostFragment.findNavController(this).navigate(R.id.nav_details);
     }
 }
