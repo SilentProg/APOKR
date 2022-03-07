@@ -106,6 +106,7 @@ public class ListHistoryAdapter extends RecyclerView.Adapter<ListHistoryAdapter.
                     }
                 });
                 Log.d("delete",mRefData.getRef().toString()+" | "+list.get(p).getTitle());
+                list.remove(p);
             }
         });
         builder.setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {

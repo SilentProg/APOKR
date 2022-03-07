@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -21,11 +22,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentRouteBinding;
 import com.savonikyurii.beatifulkrivbas.helpers.Place;
 import com.savonikyurii.beatifulkrivbas.helpers.Route;
+import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 import com.savonikyurii.beatifulkrivbas.ui.list.ListAllAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RouteFragment extends Fragment {
     private FragmentRouteBinding binding;
@@ -51,12 +54,18 @@ public class RouteFragment extends Fragment {
 
         initRoute();
 
-        binding.btnWholerouteNext.setOnClickListener(this::onNextDestinationClick);
+        binding.imageRouteCurrent.setOnClickListener(view -> {
+            DetailsFragment.place = Route.getCurrentDestination();
+            NavHostFragment.findNavController(this).navigate(R.id.nav_details);
+        });
+
+
+
     }
 
 
     private void initRoute(){
-        mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").addValueEventListener(new ValueEventListener() {
+        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.hasChildren()){
@@ -101,68 +110,11 @@ public class RouteFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-
-        //Toast.makeText(getActivity(), String.valueOf(Route.getRoute().size()), Toast.LENGTH_SHORT).show();
-        Toast.makeText(getActivity(), String.valueOf(adapter.getItemCount()), Toast.LENGTH_SHORT).show();
-        if (adapter.getItemCount()>0) binding.routelist.setVisibility(View.VISIBLE);
-        else binding.routelist.setVisibility(View.GONE);
-
-    }
 
     private void initCurrentDestination(Place newCurrentDestination){
         mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
         mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").child(newCurrentDestination.getTitle()).setValue(newCurrentDestination);
-//        mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.hasChildren()){
-//                    for (DataSnapshot ds: snapshot.getChildren()) {
-//                        Route.setCurrentDestination(ds.getValue(Place.class));
-//                    }
-//                    binding.textWholerouteTitle.setText(Route.getCurrentDestination().getTitle());
-//                    Picasso.get().load(Route.getCurrentDestination().getImageuri()).into(binding.imageRouteCurrent);
-//                    updateUi();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
         initRoute();
     }
 
-    private void onNextDestinationClick(View view){
-        if (Route.getRoute().size()>0){
-            initCurrentDestination(Route.getRoute().get(0));
-            mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").child(Route.getRoute().get(0).getTitle()).removeValue();
-            if (Route.getRoute().size()==1){
-                Route.clear();
-                adapter.notifyDataSetChanged();
-                binding.routelist.setVisibility(View.GONE);
-            }
-            mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.hasChildren()){
-                        if (Route.getRoute().size()>0) Route.clear();
-                        for (DataSnapshot ds: snapshot.getChildren()) {
-                            Route.addPlace(ds.getValue(Place.class));
-                        }
-                        updateUi();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
-    }
 }

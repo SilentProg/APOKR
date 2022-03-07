@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="16dp"
         android:elevation="10dp"
-        android:backgroundTint="@color/teal_500"
+        style="@style/Theme.BeatifulKrivbas"
         android:gravity="center">
 
         <LinearLayout
@@ -39,7 +39,6 @@
                     style="@style/homeHeading"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/blackTextColor"
                     android:textSize="@dimen/headerTextSize" />
             </LinearLayout>
 
@@ -54,39 +53,35 @@
                 android:textSize="14dp"
                 android:textStyle="normal" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/dialog_cancel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/mesage_exit_but_can"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/ic_login_button_background"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:padding="15dp"
                 app:layout_constraintHorizontal_bias="1.0"
                 android:textAlignment="center"
                 android:textAllCaps="false"
-                android:textColor="@color/teal_700"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 />
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/dialog_submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/mesage_exit_but_sub"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/ic_login_button_background"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:padding="15dp"
                 app:layout_constraintHorizontal_bias="1.0"
                 android:textAlignment="center"
                 android:textAllCaps="false"
-                android:textColor="@color/teal_700"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 />

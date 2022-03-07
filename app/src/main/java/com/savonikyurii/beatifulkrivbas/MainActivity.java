@@ -1,10 +1,14 @@
 package com.savonikyurii.beatifulkrivbas;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -21,12 +25,15 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.savonikyurii.beatifulkrivbas.helpers.User;
 import com.savonikyurii.beatifulkrivbas.ui.BottomSheetRoute;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
@@ -139,34 +146,25 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
     }
 
     private void showBeautifulDialog(String title, String description){
-        //створення діалогового віна
-        final Dialog dialog = new Dialog(this, R.style.df_dialog);
-        dialog.setContentView(R.layout.logout_dialog); //встановлення розмітки
-        //налаштування
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        //знаходження текстових полів й заповнення їх текстом
-        ((TextView) dialog.findViewById(R.id.dialog_title)).setText(title);
-        ((TextView) dialog.findViewById(R.id.dialog_description)).setText(description);
-        //знаходження кнопки й встановлення на нех слухача
-        dialog.findViewById(R.id.dialog_submit).setOnClickListener(new View.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);  // заголовок
+        builder.setMessage(description); // сообщение
+        builder.setIcon(R.drawable.ic_logout);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                //закриття діалогового ікна
-                dialog.dismiss();
-                //виклик методу виходу з аккаунту
+            public void onClick(DialogInterface dialogInterface, int i) {
                 Logout();
             }
         });
-        //знаходження кнопки й встановлення на нех слухача
-        dialog.findViewById(R.id.dialog_cancel).setOnClickListener(new View.OnClickListener() {
+        builder.setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                dialog.dismiss();
+            public void onClick(DialogInterface dialogInterface, int i) {
+
             }
         });
-        //показ діалогового вікна
-        dialog.show();
+        builder.setCancelable(true);
+        AlertDialog lg_dialog = builder.create();
+        lg_dialog.show();
     }
 
     private void Logout() {
@@ -229,5 +227,4 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
                 throw new IllegalStateException("Unexpected value: " + id);
         }
     }
-
 }

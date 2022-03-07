@@ -92,7 +92,7 @@
             app:cardElevation="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/userinfo_container"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -117,8 +117,8 @@
 
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/image_currentplace"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 app:riv_corner_radius="8dp"
                 android:src="@drawable/icon"
                 app:layout_constraintStart_toStartOf="parent"
@@ -128,9 +128,10 @@
                 android:id="@+id/label_currentplacetitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/label_current"
-                app:layout_constraintStart_toEndOf="@id/image_currentplace"
+                app:layout_constraintTop_toBottomOf="@id/image_currentplace"
+                app:layout_constraintStart_toStartOf="@id/image_currentplace"
                 app:layout_constraintEnd_toStartOf="@id/place_title_current"
+                android:layout_marginTop="5dp"
                 app:layout_constraintHorizontal_bias="0"
                 android:paddingStart="5dp"
                 android:textSize="9pt"
@@ -145,15 +146,14 @@
                 android:textSize="9pt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/label_currentplacetitle"
-                app:layout_constraintTop_toBottomOf="@id/label_current" />
+                app:layout_constraintTop_toTopOf="@id/label_currentplacetitle" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/label_currentcategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/label_currentplacetitle"
-                app:layout_constraintStart_toEndOf="@id/image_currentplace"
-                app:layout_constraintEnd_toStartOf="@id/place_category_current"
+                app:layout_constraintTop_toBottomOf="@id/place_title_current"
+                app:layout_constraintStart_toStartOf="@id/image_currentplace"
                 app:layout_constraintHorizontal_bias="0"
                 android:paddingStart="5dp"
                 android:textSize="9pt"
@@ -166,10 +166,10 @@
                 android:paddingStart="5dp"
                 android:text="@string/place_category"
                 android:textSize="9pt"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@id/label_currentcategory"
-                app:layout_constraintTop_toBottomOf="@id/place_title_current" />
+                app:layout_constraintTop_toTopOf="@id/label_currentcategory"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAllPlaceInCurrentRoute"
@@ -180,22 +180,23 @@
                 android:layout_marginBottom="8dp"
                 android:text="@string/whole_route"
                 android:textSize="12sp"
+                app:layout_constraintTop_toTopOf="@id/btnAboutDestination"
+                app:layout_constraintEnd_toStartOf="@id/btnAboutDestination"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image_currentplace" />
+                />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAboutDestination"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:textSize="12sp"
                 android:text="@string/about_destination"
-                app:layout_constraintBottom_toBottomOf="@+id/btnAllPlaceInCurrentRoute"
-                app:layout_constraintEnd_toStartOf="@+id/btnAllPlaceInCurrentRoute"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/btnAllPlaceInCurrentRoute" />
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/place_category_current"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="5dp"
+                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
@@ -207,7 +208,7 @@
             app:cardUseCompatPadding="true"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/userinfo_container"
             >
 

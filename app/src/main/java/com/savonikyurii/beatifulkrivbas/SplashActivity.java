@@ -45,6 +45,6 @@ public class SplashActivity extends AppCompatActivity {
 
         //.child("userdata").child(FirebaseAuth.getInstance().getUid()).child("visited").child("other").child("Test").removeValue();
         //mRefData.child("userdata").child(FirebaseAuth.getInstance().getUid()).child("visited").child("last").child("test").setValue(new Place("test", "test", "https://ichef.bbci.co.uk/news/640/cpsprodpb/15B7B/production/_106555988_kryviy_rig_landscape.jpg","test", 5 , "test", 5.0,5.0));
-        mRefData.child("userdata").child(FirebaseAuth.getInstance().getUid()).child("visited").child("other").child("test").setValue(new Place("test", "test", "https://ichef.bbci.co.uk/news/640/cpsprodpb/15B7B/production/_106555988_kryviy_rig_landscape.jpg","test", 5 , "test", 5.0,5.0));
+        //mRefData.child("userdata").child(FirebaseAuth.getInstance().getUid()).child("visited").child("other").child("test").setValue(new Place("test", "test", "https://ichef.bbci.co.uk/news/640/cpsprodpb/15B7B/production/_106555988_kryviy_rig_landscape.jpg","test", 5 , "test", 5.0,5.0));
     }
 }
