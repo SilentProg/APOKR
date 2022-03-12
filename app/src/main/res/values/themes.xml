@@ -26,8 +26,7 @@
         <item name="android:background">@android:color/holo_blue_dark</item>
         <item name="android:radius">10dp</item>
     </style>
-
-
+    
     <style name="ButtonBarButton" />
     <style name="viewParent">
         <item name="android:layout_width">wrap_content</item>

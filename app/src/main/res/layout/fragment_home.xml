@@ -198,6 +198,16 @@
                 android:layout_marginTop="5dp"
                  />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOpenRouteController"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/control"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnAllPlaceInCurrentRoute"
+                app:layout_constraintEnd_toStartOf="@+id/btnAllPlaceInCurrentRoute"
+                app:layout_constraintTop_toTopOf="@+id/btnAllPlaceInCurrentRoute" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 

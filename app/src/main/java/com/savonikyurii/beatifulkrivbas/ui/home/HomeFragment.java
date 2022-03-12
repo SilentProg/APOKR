@@ -1,6 +1,7 @@
 package com.savonikyurii.beatifulkrivbas.ui.home;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.savonikyurii.beatifulkrivbas.ActivityRouteController;
 import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentHomeBinding;
 import com.savonikyurii.beatifulkrivbas.helpers.Place;
@@ -62,6 +64,11 @@ public class HomeFragment extends Fragment {
         binding.btnGoToCatalog.setOnClickListener(this::onClickGoToCatalog);
         binding.btnAllPlaceInCurrentRoute.setOnClickListener(this::onBtnWholeRouteClick);
         binding.btnAboutDestination.setOnClickListener(this::onBtnAboutDestinationClick);
+        binding.btnOpenRouteController.setOnClickListener(this::onBtnOpenRouteController);
+    }
+
+    private void onBtnOpenRouteController(View view) {
+        startActivity(new Intent(getActivity(), ActivityRouteController.class));
     }
 
     private void initUser(){

@@ -89,4 +89,18 @@ public class Place implements Serializable{
     public void setAdres(String adres) {
         this.adres = adres;
     }
+
+    @Override
+    public String toString() {
+        return "Place{" +
+                "title='" + title + '\'' +
+                ", adres='" + adres + '\'' +
+                ", imageuri='" + imageuri + '\'' +
+                ", category='" + category + '\'' +
+                ", bigdescription='" + bigdescription + '\'' +
+                ", latitude=" + latitude +
+                ", longtude=" + longtude +
+                ", rate=" + rate +
+                '}';
+    }
 }
