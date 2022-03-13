@@ -81,6 +81,20 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        NavigationView nv = findViewById(R.id.nav_view);
+        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_catalog: Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.nav_catalog); drawer.closeDrawer(GravityCompat.START); break;
+                    case R.id.nav_home: Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.nav_home); drawer.closeDrawer(GravityCompat.START); break;
+                    case R.id.nav_history: Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.nav_history); drawer.closeDrawer(GravityCompat.START); break;
+                    case R.id.nav_map: Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.nav_map); drawer.closeDrawer(GravityCompat.START); break;
+                }
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -216,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
     public void onButtonClicked(int id) {
         switch (id){
             case R.id.btnBottomSheetStart:
+                startActivity(new Intent(this, ActivityRouteController.class));
                 break;
             case R.id.btnBottomSheetWholeRoute:
                 Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.nav_route);

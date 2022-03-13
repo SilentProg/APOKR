@@ -39,6 +39,7 @@ public class DetailsFragment extends Fragment{
     private BottomSheetRoute bottomSheetRoute;
     private DatabaseReference mRedfData;
     private FirebaseAuth mAuth;
+    public static boolean isVisible;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,6 +71,10 @@ public class DetailsFragment extends Fragment{
 
     private void initplace(){
         if (place==null) return;
+        if (!isVisible) {
+            binding.btnViewOnMap.setVisibility(View.GONE);
+            binding.btnAddToRoute.setVisibility(View.GONE);
+        }
         binding.textTitle.setText(place.getTitle());
         binding.textCategory.setText(place.getCategory());
         binding.textAddress.setText(place.getAdres());

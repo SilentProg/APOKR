@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +24,7 @@ import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentHistoryBinding;
 import com.savonikyurii.beatifulkrivbas.helpers.Categories;
 import com.savonikyurii.beatifulkrivbas.helpers.Place;
+import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 import com.savonikyurii.beatifulkrivbas.ui.list.ListAllAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -53,6 +55,8 @@ public class HistoryFragment extends Fragment {
         adapter = new ListHistoryAdapter(getActivity(), all_places,this);
         binding.listHistory.setAdapter(adapter);
         binding.listHistory.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        binding.btnDetailsLastDestinationDestination.setOnClickListener(this::onAboutLastDestination);
 
         mRefData.child("userdata").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("visited").child("last").addValueEventListener(new ValueEventListener() {
             @Override
@@ -93,6 +97,12 @@ public class HistoryFragment extends Fragment {
 
             }
         });
+    }
+
+    private void onAboutLastDestination(View view) {
+        DetailsFragment.isVisible = false;
+        DetailsFragment.place = place;
+        NavHostFragment.findNavController(this).navigate(R.id.nav_details);
     }
 
     private void updateUI(){

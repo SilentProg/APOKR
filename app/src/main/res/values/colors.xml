@@ -13,6 +13,7 @@
     <color name="whiteTextColor">#fff</color>
     <color name="blackTextColor">#000</color>
     <color name="shapeBottomSheetDialog">#525E47</color>
-    <color name="darkgray">#0CBEF4</color>
+    <color name="darkgray">#a9a9a9</color>
+    <color name="highlight">#0CBEF4</color>
     <color name="WHITE">#fff</color>
 </resources>

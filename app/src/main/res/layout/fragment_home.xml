@@ -92,7 +92,7 @@
             app:cardElevation="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/userinfo_container"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -183,29 +183,30 @@
                 app:layout_constraintTop_toTopOf="@id/btnAboutDestination"
                 app:layout_constraintEnd_toStartOf="@id/btnAboutDestination"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btnOpenRouteController"
                 />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAboutDestination"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginTop="5dp"
                 android:text="@string/about_destination"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/place_category_current"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="5dp"
-                 />
+                app:layout_constraintTop_toBottomOf="@id/place_category_current"
+                app:layout_constraintStart_toEndOf="@id/btnAllPlaceInCurrentRoute"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnOpenRouteController"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/control"
                 android:layout_marginEnd="8dp"
+                android:text="@string/control"
                 app:layout_constraintBottom_toBottomOf="@+id/btnAllPlaceInCurrentRoute"
                 app:layout_constraintEnd_toStartOf="@+id/btnAllPlaceInCurrentRoute"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/btnAllPlaceInCurrentRoute" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

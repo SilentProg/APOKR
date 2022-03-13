@@ -37,7 +37,6 @@ import java.util.Objects;
 public class ActivityRouteController extends AppCompatActivity{
     private ActivityRouteControllerBinding binding;
     private AppBarConfiguration mAppBarConfiguration;
-    private Toolbar toolbar;
 
 
     @Override
@@ -47,8 +46,6 @@ public class ActivityRouteController extends AppCompatActivity{
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbarRouteController);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_route_controller, R.id.nav_details_route)
                 .build();

@@ -77,6 +77,7 @@ public class ListHistoryAdapter extends RecyclerView.Adapter<ListHistoryAdapter.
             @Override
             public void onClick(View view) {
                 DetailsFragment.place = list.get(position);
+                DetailsFragment.isVisible = false;
                 NavHostFragment.findNavController(fragment).navigate(R.id.nav_details);
             }
         });

@@ -60,6 +60,7 @@ public class ListAllAdapter extends RecyclerView.Adapter<ListAllAdapter.ListAllV
             @Override
             public void onClick(View view) {
                 DetailsFragment.place = list.get(position);
+                DetailsFragment.isVisible = true;
                 NavHostFragment.findNavController(fragment).navigate(R.id.nav_details);
             }
         });

@@ -87,7 +87,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         //new FetchURL(getActivity()).execute(getUrl(new LatLng(48.014027997319744, 33.484797886699965), new LatLng(47.89591530085526, 33.33274639636037), "driving"), "driving");
        // new FetchURL(getActivity()).execute(getUrl(new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude()), new LatLng(47.89591530085526, 33.33274639636037), "driving"), "driving");
 
-        calculateDirections(new LatLng(47.999628693296565, 33.44792163717202),new LatLng(47.89591530085526, 33.33274639636037));
+        //calculateDirections(new LatLng(47.999628693296565, 33.44792163717202),new LatLng(47.89591530085526, 33.33274639636037));
 
         mMap.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
             @Override

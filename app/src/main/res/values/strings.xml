@@ -69,8 +69,8 @@
     <string name="description">Опис:</string>
     <string name="view_on_map">На карті</string>
     <string name="details_withouttwodots">Деталі</string>
-    <string name="about_destination">Про ціль</string>
-    <string name="whole_route">Весь шлях</string>
+    <string name="about_destination">Ціль</string>
+    <string name="whole_route">Шлях</string>
     <string name="about_place">Про місце</string>
     <string name="add_to_route">Додати в маршрут</string>
     <string name="start_route">Почати</string>
@@ -95,4 +95,5 @@
     <string name="now_we_are_heading">Зараз прямуємо до:</string>
     <string name="control">Керування</string>
     <string name="route_controller">Керування шляхом</string>
+    <string name="open_google_map">Відкрити гугл карти?</string>
 </resources>
