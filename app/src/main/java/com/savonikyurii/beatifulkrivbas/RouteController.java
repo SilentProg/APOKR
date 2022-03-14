@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.compat.PlaceDetectionClient;
 import com.google.android.libraries.places.compat.Places;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -107,7 +109,16 @@ public class RouteController extends Fragment implements
         mAuth = FirebaseAuth.getInstance();
         list_markers = new ArrayList<>();
         list_places = new ArrayList<>();
-
+        binding.navViewRoute.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.btnCloseDrawer: binding.routeDrawer.closeDrawer(GravityCompat.END); break;
+                    case R.id.btnGoogleMap: OpenGoogleMap(); break;
+                }
+                return true;
+            }
+        });
 
 
         init_listeners();

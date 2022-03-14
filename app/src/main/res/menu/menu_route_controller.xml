@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="@string/route_control">
+        <menu>
+            <item
+                android:id="@+id/btnSkip"
+                android:title="@string/skip"
+                android:icon="@drawable/skip"
+                />
+
+            <item
+                android:id="@+id/btnSkipAndMarkForVisited"
+                android:title="@string/skip_visited"
+                android:icon="@drawable/visited"
+                />
+
+            <item
+                android:id="@+id/btnAllRoute"
+                android:title="@string/all_route"
+                android:icon="@drawable/allroute"
+                />
+
+            <item
+                android:id="@+id/btnGoogleMap"
+                android:title="@string/calculate_route"
+                android:icon="@drawable/ic_baseline_map"
+                />
+        </menu>
+    </item>
+    <item android:title="@string/menu_control">
+        <menu>
+            <item
+                android:id="@+id/btnCloseDrawer"
+                android:title="@string/hide"
+                android:icon="@drawable/hide"
+                />
+        </menu>
+    </item>
+
+</menu>

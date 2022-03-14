@@ -91,9 +91,16 @@
     <string name="yes">Так</string>
     <string name="NO">НІ</string>
     <string name="canceled">Виділення відмінено!</string>
-    <string name="route_control">Керування маршрутом</string>
     <string name="now_we_are_heading">Зараз прямуємо до:</string>
     <string name="control">Керування</string>
     <string name="route_controller">Керування шляхом</string>
     <string name="open_google_map">Відкрити гугл карти?</string>
+    <string name="route_control">Керування маршрутом</string>
+    <string name="skip">Пропустити поточну ціль</string>
+    <string name="skip_and_mark_visited">Пропустити поточну ціль</string>
+    <string name="all_route">Показати весь маршрут</string>
+    <string name="calculate_route">Прокласти маршрут до цілі</string>
+    <string name="menu_control">Керування меню</string>
+    <string name="hide">Приховати</string>
+    <string name="skip_visited">Пропустити як відвідане</string>
 </resources>
