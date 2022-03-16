@@ -34,6 +34,8 @@ import com.savonikyurii.beatifulkrivbas.helpers.User;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private DatabaseReference mRefData;

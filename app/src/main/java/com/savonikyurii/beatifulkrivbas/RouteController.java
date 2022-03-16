@@ -101,6 +101,7 @@ public class RouteController extends Fragment implements
     private boolean mLocationPermissionsGranted;
     private Location currentLocation = null;
     private Duration currentDuration;
+    private boolean allRoute = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -133,6 +134,7 @@ public class RouteController extends Fragment implements
                     case R.id.btnSkipAndMarkForVisited: skipDestinationAndMarkByVisited(); break;
                     case R.id.btnAllRoute: allRouteVisible(); break;
                     case R.id.btnGoogleMap: OpenGoogleMap(); break;
+                    case R.id.btnEndRoute: endRoute(); break;
                 }
                 return true;
             }
@@ -147,28 +149,58 @@ public class RouteController extends Fragment implements
         }
     }
 
-    private void change_current() {
-
-        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Place temp = new Place();
-                for (DataSnapshot  data: snapshot.getChildren()) {
-                    temp = data.getValue(Place.class);
-                }
-                getDeviceLocation();
-                assert temp != null;
-                calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),new LatLng(temp.getLatitude(),temp.getLongtude()));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    private void endRoute() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.warning)
+                .setMessage(R.string.ask_endr_route)
+                .setCancelable(true)
+                .setIcon(R.drawable.warning)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").removeValue();
+                        startActivity(new Intent(getActivity(), MainActivity.class));
+                        Objects.requireNonNull(getActivity()).finish();
+                    }
+                })
+                .setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void allRouteVisible() {
+        if(allRoute){
+            if (mPolyLinesData.size()>0){
+                for (PolylineData polylineData : mPolyLinesData) {
+                    polylineData.getPolyline().remove();
+                }
+                mPolyLinesData.clear();
+                mPolyLinesData = new ArrayList<>();
+            }
+            calculateDirections(new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()),new LatLng(Route.getRoute().get(0).getLatitude(), Route.getRoute().get(0).getLongtude()), false, false);
+            for (int i = 0; i < Route.getRoute().size(); i++){
+                try {
+
+                    calculateDirections(new LatLng(Route.getRoute().get(i).getLatitude(),Route.getRoute().get(i).getLongtude()), new LatLng(Route.getRoute().get(i+1).getLatitude(),Route.getRoute().get(i+1).getLongtude()), false, false);
+
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+            }
+            calculateDirections(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), false, false);
+            allRoute = false;
+            binding.navViewRoute.getMenu().findItem(R.id.btnAllRoute).setTitle(R.string.route_to_destination);
+            binding.routeDrawer.closeDrawer(GravityCompat.END);
+        }else{
+            allRoute = true;
+            binding.navViewRoute.getMenu().findItem(R.id.btnAllRoute).setTitle(R.string.all_route);
+            calculateDirections(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), true, true);
+            binding.routeDrawer.closeDrawer(GravityCompat.END);
+        }
+
     }
 
     private void skipDestinationAndMarkByVisited() {
@@ -207,7 +239,7 @@ public class RouteController extends Fragment implements
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     for (DataSnapshot  data: snapshot.getChildren()) {
                                         Place temp = data.getValue(Place.class);
-                                        calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(temp.getLatitude(), temp.getLongtude()));
+                                        calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(temp.getLatitude(), temp.getLongtude()), true, true);
                                     }
                                 }
 
@@ -389,7 +421,7 @@ public class RouteController extends Fragment implements
 
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM);
-                            calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),new LatLng(Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude()));
+                            calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),new LatLng(Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude()), true, true);
                         }else{
                             Log.d(TAG, "onComplete: current location is null");
                             Toast.makeText(getActivity(), "unable to get current location", Toast.LENGTH_SHORT).show();
@@ -505,7 +537,7 @@ public class RouteController extends Fragment implements
         }
     }
 
-    private void calculateDirections(LatLng start, LatLng end){
+    private void calculateDirections(LatLng start, LatLng end, boolean alt, boolean isClear){
 
         Log.d(TAG, "calculateDirections: calculating directions.");
 
@@ -515,7 +547,7 @@ public class RouteController extends Fragment implements
         );
         DirectionsApiRequest directions = new DirectionsApiRequest(mGeoApiContext);
 
-        directions.alternatives(true);
+        directions.alternatives(alt);
         directions.origin(
                 new com.google.maps.model.LatLng(
                         start.latitude,
@@ -530,7 +562,7 @@ public class RouteController extends Fragment implements
                 Log.d(TAG, "calculateDirections: duration: " + result.routes[0].legs[0].duration);
                 Log.d(TAG, "calculateDirections: distance: " + result.routes[0].legs[0].distance);
                 Log.d(TAG, "calculateDirections: geocodedWayPoints: " + result.geocodedWaypoints[0].toString());
-                addPolylinesToMap(result);
+                addPolylinesToMap(result, isClear);
             }
 
             @Override
@@ -541,18 +573,19 @@ public class RouteController extends Fragment implements
         });
     }
 
-    private void addPolylinesToMap(final DirectionsResult result){
+    private void addPolylinesToMap(final DirectionsResult result, boolean isClear){
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "run: result routes: " + result.routes.length);
-
-                if (mPolyLinesData.size()>0){
-                    for (PolylineData polylineData : mPolyLinesData) {
-                        polylineData.getPolyline().remove();
+                if (isClear){
+                    if (mPolyLinesData.size()>0){
+                        for (PolylineData polylineData : mPolyLinesData) {
+                            polylineData.getPolyline().remove();
+                        }
+                        mPolyLinesData.clear();
+                        mPolyLinesData = new ArrayList<>();
                     }
-                    mPolyLinesData.clear();
-                    mPolyLinesData = new ArrayList<>();
                 }
                 double duration = 999999999;
                 for(DirectionsRoute route: result.routes){

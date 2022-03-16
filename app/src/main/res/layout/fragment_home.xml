@@ -7,10 +7,6 @@
     tools:context=".ui.home.HomeFragment"
     >
 
-    <!--
-    Список все точек маршрута
-    -->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -219,7 +215,7 @@
             app:cardUseCompatPadding="true"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/userinfo_container"
             >
 

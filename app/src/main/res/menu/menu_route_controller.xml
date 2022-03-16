@@ -34,6 +34,12 @@
                 android:title="@string/calculate_route"
                 android:icon="@drawable/ic_baseline_map"
                 />
+
+            <item
+                android:id="@+id/btnEndRoute"
+                android:title="@string/end_route"
+                android:icon="@drawable/endr_route"
+                />
         </menu>
     </item>
     <item android:title="@string/menu_control">

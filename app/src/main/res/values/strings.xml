@@ -108,4 +108,9 @@
     <string name="ask_skip">Ви впевнені що бажаєте пропустити поточну ціль?</string>
     <string name="end_route_warning">Це остання точка подорожі, ви впевненні що хочете завершити маршрут?</string>
     <string name="warning">Попередження</string>
+    <string name="end_route">Завершити маршрут</string>
+    <string name="ask_endr_route">Ви впевнені що бажаєте завершити маршрут?</string>
+    <string name="menu">Меню</string>
+    <string name="logout_from_acaunt">Вихід з акаунта</string>
+    <string name="route_to_destination">Маршрут до цілі</string>
 </resources>

@@ -2,23 +2,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_baseline_home"
-            android:title="@string/main" />
-        <item
-            android:id="@+id/nav_catalog"
-            android:icon="@drawable/ic_baseline_view_list_24"
-            android:title="@string/catalog" />
-        <item
-            android:id="@+id/nav_map"
-            android:icon="@drawable/ic_baseline_map"
-            android:title="@string/menu_map" />
-        <item
-            android:id="@+id/nav_history"
-            android:icon="@drawable/ic_baseline_history"
-            android:title="@string/history" />
-    </group>
+    <item android:title="@string/menu">
+        <menu>
+            <item
+                android:id="@+id/nav_home"
+                android:icon="@drawable/ic_baseline_home"
+                android:title="@string/main" />
+            <item
+                android:id="@+id/nav_catalog"
+                android:icon="@drawable/ic_baseline_view_list_24"
+                android:title="@string/catalog" />
+            <item
+                android:id="@+id/nav_map"
+                android:icon="@drawable/ic_baseline_map"
+                android:title="@string/menu_map" />
+            <item
+                android:id="@+id/nav_history"
+                android:icon="@drawable/ic_baseline_history"
+                android:title="@string/history" />
+        </menu>
+    </item>
+    <item android:title="@string/logout_from_acaunt">
+        <menu>
+            <item
+                android:id="@+id/btnLogout"
+                android:title="@string/logout"
+                android:icon="@drawable/ic_logout"
+                />
+        </menu>
+    </item>
 </menu>

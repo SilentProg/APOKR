@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
                     case R.id.nav_home: Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.nav_home); drawer.closeDrawer(GravityCompat.START); break;
                     case R.id.nav_history: Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.nav_history); drawer.closeDrawer(GravityCompat.START); break;
                     case R.id.nav_map: Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.nav_map); drawer.closeDrawer(GravityCompat.START); break;
+                    case R.id.btnLogout: showBeautifulDialog(getString(R.string.exit),getString(R.string.logout_message)); break;
                 }
                 return true;
             }
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
             // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, CODE_LOCATION);
         }
-        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.nav_home);
+        //Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.nav_home);
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -152,12 +153,6 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
                 }
             }
         });
-
-        btnLogout.setOnClickListener(this::onBtnLogoutClick);
-    }
-
-    private void onBtnLogoutClick(View view){
-        showBeautifulDialog(getString(R.string.exit),getString(R.string.logout_message));
     }
 
     private void showBeautifulDialog(String title, String description){
@@ -232,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
         switch (id){
             case R.id.btnBottomSheetStart:
                 startActivity(new Intent(this, ActivityRouteController.class));
+                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.nav_home);
                 break;
             case R.id.btnBottomSheetWholeRoute:
                 Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.nav_route);
