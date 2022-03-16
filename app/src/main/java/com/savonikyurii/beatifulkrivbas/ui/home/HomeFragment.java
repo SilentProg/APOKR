@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment {
                     for (DataSnapshot  ds: snapshot.getChildren()) {
                         Place temp = ds.getValue(Place.class);
 
-                        Picasso.get().load(temp.getImageuri()).into(binding.imageCurrentplace);
+                        Picasso.get().load(temp.getImageuri()).placeholder(R.drawable.image_placeholder).into(binding.imageCurrentplace);
                         TextView title = binding.getRoot().findViewById(R.id.place_title_current);
                         TextView category = binding.getRoot().findViewById(R.id.place_category_current);
                         title.setText(temp.getTitle());

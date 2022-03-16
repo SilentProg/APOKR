@@ -103,4 +103,9 @@
     <string name="menu_control">Керування меню</string>
     <string name="hide">Приховати</string>
     <string name="skip_visited">Пропустити як відвідане</string>
+    <string name="next_destination">Наступна ціль</string>
+    <string name="change_current">Змінити поточну ціль</string>
+    <string name="ask_skip">Ви впевнені що бажаєте пропустити поточну ціль?</string>
+    <string name="end_route_warning">Це остання точка подорожі, ви впевненні що хочете завершити маршрут?</string>
+    <string name="warning">Попередження</string>
 </resources>

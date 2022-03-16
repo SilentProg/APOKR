@@ -10,9 +10,11 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.app.FragmentManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,13 +30,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.savonikyurii.beatifulkrivbas.databinding.ActivityRouteControllerBinding;
 import com.savonikyurii.beatifulkrivbas.helpers.Place;
 import com.savonikyurii.beatifulkrivbas.helpers.Route;
+import com.savonikyurii.beatifulkrivbas.helpers.loclistener.LocListenerInterface;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 import com.savonikyurii.beatifulkrivbas.ui.home.HomeFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
-public class ActivityRouteController extends AppCompatActivity{
+public class ActivityRouteController extends AppCompatActivity {
     private ActivityRouteControllerBinding binding;
     private AppBarConfiguration mAppBarConfiguration;
 

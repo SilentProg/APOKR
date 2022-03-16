@@ -41,6 +41,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
+        android:visibility="gone"
         android:layout_marginBottom="64dp"
         android:text="Some text here"
         app:layout_constraintBottom_toBottomOf="parent"

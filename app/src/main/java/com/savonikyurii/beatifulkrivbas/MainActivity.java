@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
             // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, CODE_LOCATION);
         }
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.nav_home);
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

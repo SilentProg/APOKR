@@ -6,6 +6,12 @@
     <item android:title="@string/route_control">
         <menu>
             <item
+                android:id="@+id/btnChange"
+                android:title="@string/change_current"
+                android:icon="@drawable/change_current"
+                />
+
+            <item
                 android:id="@+id/btnSkip"
                 android:title="@string/skip"
                 android:icon="@drawable/skip"

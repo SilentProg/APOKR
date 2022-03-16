@@ -2,10 +2,12 @@ package com.savonikyurii.beatifulkrivbas;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -42,6 +44,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.compat.PlaceDetectionClient;
 import com.google.android.libraries.places.compat.Places;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -61,6 +65,8 @@ import com.savonikyurii.beatifulkrivbas.helpers.CustomInfoWindowGoogleMap;
 import com.savonikyurii.beatifulkrivbas.helpers.Place;
 import com.savonikyurii.beatifulkrivbas.helpers.PolylineData;
 import com.savonikyurii.beatifulkrivbas.helpers.Route;
+import com.savonikyurii.beatifulkrivbas.helpers.loclistener.LocListenerInterface;
+import com.savonikyurii.beatifulkrivbas.helpers.loclistener.MyLocListener;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 import com.squareup.picasso.Picasso;
 
@@ -69,7 +75,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class RouteController extends Fragment implements
-        OnMapReadyCallback, GoogleMap.OnPolylineClickListener {
+        OnMapReadyCallback, GoogleMap.OnPolylineClickListener, LocListenerInterface {
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 45;
     private GoogleMap mMap;
     private FragmentRouteControllerBinding binding;
@@ -81,6 +87,8 @@ public class RouteController extends Fragment implements
     private Polyline currentPolyline;
     private GeoApiContext mGeoApiContext = null;
     private ArrayList<PolylineData> mPolyLinesData = new ArrayList<>();
+    private LocationManager locationManager;
+    private MyLocListener locListener;
 
     private static final String TAG = "MapActivity";
 
@@ -107,6 +115,12 @@ public class RouteController extends Fragment implements
     private void init(){
         mRefData = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+
+        init_gps();
+
+        //change_current();
+
+
         list_markers = new ArrayList<>();
         list_places = new ArrayList<>();
         binding.navViewRoute.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -114,12 +128,15 @@ public class RouteController extends Fragment implements
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.btnCloseDrawer: binding.routeDrawer.closeDrawer(GravityCompat.END); break;
+                    case R.id.btnChange: changeCurrentDestination(); break;
+                    case R.id.btnSkip: skipDestination(); break;
+                    case R.id.btnSkipAndMarkForVisited: skipDestinationAndMarkByVisited(); break;
+                    case R.id.btnAllRoute: allRouteVisible(); break;
                     case R.id.btnGoogleMap: OpenGoogleMap(); break;
                 }
                 return true;
             }
         });
-
 
         init_listeners();
 
@@ -130,9 +147,135 @@ public class RouteController extends Fragment implements
         }
     }
 
+    private void change_current() {
+
+        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Place temp = new Place();
+                for (DataSnapshot  data: snapshot.getChildren()) {
+                    temp = data.getValue(Place.class);
+                }
+                getDeviceLocation();
+                assert temp != null;
+                calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),new LatLng(temp.getLatitude(),temp.getLongtude()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void allRouteVisible() {
+    }
+
+    private void skipDestinationAndMarkByVisited() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(Objects.requireNonNull(getActivity()).getString(R.string.ask_skip))
+                .setCancelable(true)
+                .setIcon(R.drawable.skip)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+
+                        }
+                })
+                .setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void skipDestination() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(Objects.requireNonNull(getActivity()).getString(R.string.ask_skip))
+                .setCancelable(true)
+                .setIcon(R.drawable.skip)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        if (Route.getRoute().size()>0){
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getRoute().get(0).getTitle()).setValue(Route.getRoute().get(0));
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("allDestination").child(Route.getRoute().get(0).getTitle()).removeValue();
+                            Route.removeByIndex(0);
+                            mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for (DataSnapshot  data: snapshot.getChildren()) {
+                                        Place temp = data.getValue(Place.class);
+                                        calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(temp.getLatitude(), temp.getLongtude()));
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                        }else {
+                            final AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+                            b.setTitle(getActivity().getString(R.string.warning))
+                                    .setMessage(R.string.end_route_warning)
+                                    .setIcon(R.drawable.warning)
+                                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
+                                            startActivity(new Intent(getActivity(), MainActivity.class));
+                                            Objects.requireNonNull(getActivity()).finish();
+                                        }
+                                    })
+                            .setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                            final AlertDialog a = b.create();
+                            a.show();
+                        }
+
+                    }
+                })
+                .setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void changeCurrentDestination() {
+    }
+
+    private void init_gps(){
+        locationManager = (LocationManager) Objects.requireNonNull(getActivity()).getSystemService(Context.LOCATION_SERVICE);
+        locListener = new MyLocListener();
+        locListener.setLocListenerInterface(this);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2, 1, locListener);
+        }else{
+            getLocationPermission();
+        }
+    }
+
+
     private void init_listeners(){
         binding.btnAboutCurrentRouteController.setOnClickListener(this::onBtnAboutClick);
         binding.btnOpenControlMenu.setOnClickListener(this::onBtnMenuClick);
+        binding.btnAboutNext.setOnClickListener(this::onBtnAboutNextClick);
+    }
+
+    private void onBtnAboutNextClick(View view) {
+        DetailsFragment.isVisible = false;
+        DetailsFragment.place = Route.getRoute().get(0);
+        NavHostFragment.findNavController(this).navigate(R.id.nav_details_route);
     }
 
     private void onBtnMenuClick(View view) {
@@ -194,6 +337,7 @@ public class RouteController extends Fragment implements
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             mMap.setOnPolylineClickListener(this);
+
         }
 
         
@@ -220,7 +364,6 @@ public class RouteController extends Fragment implements
                       mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude()), 15));
                   }
               }
-
               @Override
               public void onCancelled(@NonNull DatabaseError error) {
 
@@ -330,6 +473,15 @@ public class RouteController extends Fragment implements
                         Route.addPlace(temp);
                     }
                     init_markers();
+                    try {
+                        binding.textTitleNext.setText(Route.getRoute().get(0).getTitle());
+                        Picasso.get().load(Route.getRoute().get(0).getImageuri()).placeholder(R.drawable.image_placeholder).into(binding.imgNext);
+                    }catch (Exception e){
+                        System.out.println(e.getMessage());
+                        binding.containerTop.setVisibility(View.GONE);
+                    }
+                }else {
+                    binding.containerTop.setVisibility(View.GONE);
                 }
             }
 
@@ -428,13 +580,9 @@ public class RouteController extends Fragment implements
                     if(tempDuration < duration){
                         duration = tempDuration;
                         onPolylineClick(polyline);
-
                     }
-
                 }
-                //onPolylineClick(mPolyLinesData.get(0).getPolyline());
             }
-
         });
 
     }
@@ -479,5 +627,19 @@ public class RouteController extends Fragment implements
             }
         }
 
+    }
+
+    public static double calculateDistance(double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
+        float[] results = new float[1];
+        Location.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude, results);
+        return results[0];
+    }
+
+    @Override
+    public void onChangeLocation(Location loc) {
+        if (calculateDistance(loc.getLatitude(),loc.getLongitude(),Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude())<=100){
+            Snackbar.make(binding.getRoot(), "LOX", BaseTransientBottomBar.LENGTH_SHORT).show();
+        }
+        //Snackbar.make(binding.mainContainer.getRootView(), loc.getLatitude()+" | "+loc.getLongitude() + " | " + calculateDistance(loc.getLatitude(),loc.getLongitude(),Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude()), BaseTransientBottomBar.LENGTH_SHORT).show();
     }
 }
