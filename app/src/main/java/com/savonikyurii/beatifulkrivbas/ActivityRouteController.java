@@ -10,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,13 +32,14 @@ import com.savonikyurii.beatifulkrivbas.databinding.ActivityRouteControllerBindi
 import com.savonikyurii.beatifulkrivbas.helpers.Place;
 import com.savonikyurii.beatifulkrivbas.helpers.Route;
 import com.savonikyurii.beatifulkrivbas.helpers.loclistener.LocListenerInterface;
+import com.savonikyurii.beatifulkrivbas.ui.BottomSheetRoute;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 import com.savonikyurii.beatifulkrivbas.ui.home.HomeFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
-public class ActivityRouteController extends AppCompatActivity {
+public class ActivityRouteController extends AppCompatActivity implements BottomSheetRoute.BottomSheetRouteListener {
     private ActivityRouteControllerBinding binding;
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -57,5 +59,24 @@ public class ActivityRouteController extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(binding.toolbarRouteController, navController);
 
+    }
+
+    @Override
+    public void onButtonClicked(int id) {
+        switch (id){
+            case R.id.btnBottomSheetStart:
+                Navigation.findNavController(this, R.id.nav_host_fragment_route).popBackStack(R.id.nav_details_route, true);
+                Navigation.findNavController(this, R.id.nav_host_fragment_route).navigate(R.id.nav_route_controller);
+                Navigation.findNavController(this, R.id.nav_host_fragment_route).popBackStack(R.id.nav_details_route, true);
+                break;
+            case R.id.btnBottomSheetWholeRoute:
+                Navigation.findNavController(this, R.id.nav_host_fragment_route).navigate(R.id.nav_allPoints);
+                break;
+            case R.id.btnBottomSheetReturnToList:
+                Navigation.findNavController(this,R.id.nav_host_fragment_route).navigateUp();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + id);
+        }
     }
 }

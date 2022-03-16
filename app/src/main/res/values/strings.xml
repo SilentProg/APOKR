@@ -113,4 +113,10 @@
     <string name="menu">Меню</string>
     <string name="logout_from_acaunt">Вихід з акаунта</string>
     <string name="route_to_destination">Маршрут до цілі</string>
+    <string name="chopse_destination">Виберіть ціль</string>
+    <string name="cancel">Відмінити</string>
+    <string name="list_of_destination">Список цілей</string>
+    <string name="d_route">Цілі маршрута</string>
+    <string name="add_des">Додати ціль</string>
+    <string name="del_des">Видалити ціль</string>
 </resources>

@@ -86,6 +86,7 @@ public class HistoryFragment extends Fragment {
         mRefData.child("userdata").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("visited").child("other").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (all_places.size()>0) all_places.clear();
                 for (DataSnapshot data: snapshot.getChildren()) {
                     all_places.add(data.getValue(Place.class));
                 }

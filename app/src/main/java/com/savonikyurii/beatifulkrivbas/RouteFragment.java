@@ -56,7 +56,12 @@ public class RouteFragment extends Fragment {
 
         binding.imageRouteCurrent.setOnClickListener(view -> {
             DetailsFragment.place = Route.getCurrentDestination();
-            NavHostFragment.findNavController(this).navigate(R.id.nav_details);
+            try {
+                NavHostFragment.findNavController(this).navigate(R.id.nav_details);
+            }catch (Exception e){
+                NavHostFragment.findNavController(this).navigate(R.id.nav_details_route);
+            }
+
         });
 
 

@@ -45,45 +45,81 @@ public class CatalogFragment extends Fragment {
 
     private void onClickAllPlaces(View view){
         ListFragment.category = Categories.AllObjects;
-        NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        try {
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        }catch (Exception e){
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
+        }
     }
 
     private void onMilitaryPatrioticClick(View view){
         ListFragment.category = Categories.MilitaryPatriotic;
-        NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        try {
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        }catch (Exception e){
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
+        }
     }
 
     private void onCulturalClick(View view){
         ListFragment.category = Categories.CulturalObjects;
-        NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        try {
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        }catch (Exception e){
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
+        }
     }
 
     private void onReligiousClick(View view){
         ListFragment.category = Categories.ReligiousObjects;
-        NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        try {
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        }catch (Exception e){
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
+        }
     }
     private void onHistoricalClick(View view) {
         ListFragment.category = Categories.HistoricalObjects;
-        NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        try {
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        }catch (Exception e){
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
+        }
     }
     private void onArchitecturalClick(View view) {
         ListFragment.category = Categories.ArchitecturalObjects;
-        NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        try {
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        }catch (Exception e){
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
+        }
     }
 
     private void onOtherClick(View view) {
         ListFragment.category = Categories.OtherObjects;
-        NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        try {
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        }catch (Exception e){
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
+        }
     }
 
     private void onUrbanClick(View view) {
         ListFragment.category = Categories.UrbanObjects;
-        NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        try {
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        }catch (Exception e){
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
+        }
     }
 
     private void onNaturalClick(View view) {
         ListFragment.category = Categories.NaturalObjects;
-        NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        try {
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list);
+        }catch (Exception e){
+            NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
+        }
     }
 
 }

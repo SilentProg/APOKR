@@ -14,4 +14,19 @@
         android:name="com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment"
         android:label="@string/details_withouttwodots"
         tools:layout="@layout/fragment_details" />
+    <fragment
+        android:id="@+id/nav_allPoints"
+        android:name="com.savonikyurii.beatifulkrivbas.RouteFragment"
+        android:label="@string/list_of_destination"
+        tools:layout="@layout/fragment_route" />
+    <fragment
+        android:id="@+id/nav_catalog_route"
+        android:name="com.savonikyurii.beatifulkrivbas.ui.catalog.CatalogFragment"
+        android:label="@string/catalog"
+        tools:layout="@layout/fragment_catalog" />
+    <fragment
+        android:id="@+id/nav_list_route"
+        android:name="com.savonikyurii.beatifulkrivbas.ui.list.ListFragment"
+        android:label="@string/list"
+        tools:layout="@layout/fragment_list" />
 </navigation>

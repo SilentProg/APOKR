@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -113,6 +114,51 @@ public class RouteController extends Fragment implements
         return binding.getRoot();
     }
 
+    private void sort_points(){
+        /*mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (Route.getRoute().size()>0) Route.clear();
+                for (DataSnapshot ds: snapshot.getChildren()) {
+                    Route.addPlace(ds.getValue(Place.class));
+                }
+
+                List<Place> sortedList = new ArrayList<>();
+
+                LatLng current = new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude());
+
+                List<Double> dfkhgl = new ArrayList<>();
+                Double min = calculateDistance(current, new LatLng(Route.getRoute().get(0).getLatitude(),Route.getRoute().get(0).getLongtude()));
+                for (int i = 0; i < Route.getRoute().size()-1; i++){
+                   // for (int j = 0; j < Route.getRoute().size()-1; j++){
+                        if (calculateDistance(current, new LatLng(Route.getRoute().get(i).getLatitude(),Route.getRoute().get(i).getLongtude()))<min){
+                            min = calculateDistance(current, new LatLng(Route.getRoute().get(i).getLatitude(),Route.getRoute().get(i).getLongtude()));
+                            Place temp = Route.getRoute().get(i);
+                            Route.getRoute().set(i, Route.getRoute().get(i+1));
+                            Route.getRoute().set(i+1, temp);
+                            dfkhgl.add(calculateDistance(current, new LatLng(Route.getRoute().get(i).getLatitude(),Route.getRoute().get(i).getLongtude())));
+                        }
+                   // }
+                }
+                Log.d("DDDDD", min.toString());
+                Log.d("DDDDD", dfkhgl.toString());
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });*/
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
     private void init(){
         mRefData = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -135,6 +181,9 @@ public class RouteController extends Fragment implements
                     case R.id.btnAllRoute: allRouteVisible(); break;
                     case R.id.btnGoogleMap: OpenGoogleMap(); break;
                     case R.id.btnEndRoute: endRoute(); break;
+                    case R.id.btnViewPoints: NavHostFragment.findNavController(RouteController.this).navigate(R.id.nav_allPoints); break;
+                    case R.id.btnAddPoint: NavHostFragment.findNavController(RouteController.this).navigate(R.id.nav_catalog_route); break;
+                    case R.id.btnDelPoint: deletePoint(); break;
                 }
                 return true;
             }
@@ -147,6 +196,10 @@ public class RouteController extends Fragment implements
                     .apiKey("AIzaSyBR5UdpoDsXIU_jax39-Yo43qKVQ_XttHU")
                     .build();
         }
+        sort_points();
+    }
+
+    private void deletePoint() {
     }
 
     private void endRoute() {
@@ -180,7 +233,11 @@ public class RouteController extends Fragment implements
                 mPolyLinesData.clear();
                 mPolyLinesData = new ArrayList<>();
             }
-            calculateDirections(new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()),new LatLng(Route.getRoute().get(0).getLatitude(), Route.getRoute().get(0).getLongtude()), false, false);
+            try {
+                calculateDirections(new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()),new LatLng(Route.getRoute().get(0).getLatitude(), Route.getRoute().get(0).getLongtude()), false, false);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
             for (int i = 0; i < Route.getRoute().size(); i++){
                 try {
 
@@ -190,28 +247,123 @@ public class RouteController extends Fragment implements
                     System.out.println(e.getMessage());
                 }
             }
-            calculateDirections(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), false, false);
+            try {
+                calculateDirections(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), false, false);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
             allRoute = false;
             binding.navViewRoute.getMenu().findItem(R.id.btnAllRoute).setTitle(R.string.route_to_destination);
             binding.routeDrawer.closeDrawer(GravityCompat.END);
         }else{
-            allRoute = true;
-            binding.navViewRoute.getMenu().findItem(R.id.btnAllRoute).setTitle(R.string.all_route);
-            calculateDirections(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), true, true);
-            binding.routeDrawer.closeDrawer(GravityCompat.END);
+            try {
+                allRoute = true;
+                binding.navViewRoute.getMenu().findItem(R.id.btnAllRoute).setTitle(R.string.all_route);
+                calculateDirections(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), true, true);
+                binding.routeDrawer.closeDrawer(GravityCompat.END);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
-
     }
 
     private void skipDestinationAndMarkByVisited() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(Objects.requireNonNull(getActivity()).getString(R.string.ask_skip))
                 .setCancelable(true)
-                .setIcon(R.drawable.skip)
+                .setIcon(R.drawable.visited)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
 
+                        if (Route.getRoute().size()>0){
+
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if(snapshot.hasChildren()) {
+                                        Place place = new Place();
+                                        for (DataSnapshot ds: snapshot.getChildren()) {
+                                            place = ds.getValue(Place.class);
+                                        }
+                                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(place.getTitle()).removeValue();
+                                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("other").child(place.getTitle()).setValue(place);
+                                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
+                                    }else {
+                                        mRefData.child("userdata").child(mAuth.getUid()).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
+                                    }
+
+                                    mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
+                                    mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getRoute().get(0).getTitle()).setValue(Route.getRoute().get(0));
+                                    mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("allDestination").child(Route.getRoute().get(0).getTitle()).removeValue();
+                                    Route.removeByIndex(0);
+                                    mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            for (DataSnapshot  data: snapshot.getChildren()) {
+                                                Place temp = data.getValue(Place.class);
+                                                calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(temp.getLatitude(), temp.getLongtude()), true, true);
+                                                binding.routeDrawer.closeDrawer(GravityCompat.END);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }else {
+                            final AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+                            b.setTitle(getActivity().getString(R.string.warning))
+                                    .setMessage(R.string.end_route_warning)
+                                    .setIcon(R.drawable.warning)
+                                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    if(snapshot.hasChildren()) {
+                                                        Place place = new Place();
+                                                        for (DataSnapshot ds: snapshot.getChildren()) {
+                                                            place = ds.getValue(Place.class);
+                                                        }
+                                                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(place.getTitle()).removeValue();
+                                                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("other").child(place.getTitle()).setValue(place);
+                                                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
+                                                    }else {
+                                                        mRefData.child("userdata").child(mAuth.getUid()).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
+                                                    }
+
+                                                    mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
+                                                    startActivity(new Intent(getActivity(), MainActivity.class));
+                                                    Objects.requireNonNull(getActivity()).finish();
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                }
+                                            });
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    });
+                            final AlertDialog a = b.create();
+                            a.show();
                         }
+
+                    }
                 })
                 .setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
@@ -240,6 +392,7 @@ public class RouteController extends Fragment implements
                                     for (DataSnapshot  data: snapshot.getChildren()) {
                                         Place temp = data.getValue(Place.class);
                                         calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(temp.getLatitude(), temp.getLongtude()), true, true);
+                                        binding.routeDrawer.closeDrawer(GravityCompat.END);
                                     }
                                 }
 
@@ -284,6 +437,59 @@ public class RouteController extends Fragment implements
     }
 
     private void changeCurrentDestination() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item);
+                for (DataSnapshot ds: snapshot.getChildren()) {
+                    arrayAdapter.add(ds.getValue(Place.class).getTitle());
+                }
+
+                builder
+                        .setTitle(R.string.chopse_destination)
+                        .setIcon(R.drawable.chose)
+                        .setCancelable(true)
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Place oldP = Route.getCurrentDestination();
+                        Place newP = Route.getRoute().get(which);
+
+                        mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").removeValue();
+                        mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").child(newP.getTitle()).setValue(newP);
+
+                        /*Snackbar.make(binding.getRoot(), Route.getRoute().get(which).getTitle(), BaseTransientBottomBar.LENGTH_SHORT).show();*/
+
+                        mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").child(oldP.getTitle()).setValue(oldP);
+                        mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").child(newP.getTitle()).removeValue();
+                        Route.setCurrentDestination(newP);
+                        calculateDirections(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()), new LatLng(newP.getLatitude(), newP.getLongtude()), true, true);
+
+                        allRoute = true;
+                        binding.navViewRoute.getMenu().findItem(R.id.btnAllRoute).setTitle(R.string.all_route);
+
+                        binding.routeDrawer.closeDrawer(GravityCompat.END);
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void init_gps(){
@@ -369,7 +575,7 @@ public class RouteController extends Fragment implements
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             mMap.setOnPolylineClickListener(this);
-
+            currentLocation = mMap.getMyLocation();
         }
 
         
@@ -662,15 +868,16 @@ public class RouteController extends Fragment implements
 
     }
 
-    public static double calculateDistance(double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
+    public static double calculateDistance(LatLng start, LatLng end) {
         float[] results = new float[1];
-        Location.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude, results);
+        Location.distanceBetween(start.latitude, start.longitude, end.latitude, end.longitude, results);
         return results[0];
     }
 
     @Override
     public void onChangeLocation(Location loc) {
-        if (calculateDistance(loc.getLatitude(),loc.getLongitude(),Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude())<=100){
+        currentLocation = loc;
+        if (calculateDistance(new LatLng(loc.getLatitude(),loc.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude()))<=100){
             Snackbar.make(binding.getRoot(), "LOX", BaseTransientBottomBar.LENGTH_SHORT).show();
         }
         //Snackbar.make(binding.mainContainer.getRootView(), loc.getLatitude()+" | "+loc.getLongitude() + " | " + calculateDistance(loc.getLatitude(),loc.getLongitude(),Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude()), BaseTransientBottomBar.LENGTH_SHORT).show();

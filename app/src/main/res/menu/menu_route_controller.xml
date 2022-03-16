@@ -3,6 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
+    <item android:title="@string/d_route">
+        <menu>
+            <item
+                android:id="@+id/btnViewPoints"
+                android:title="@string/list_of_destination"
+                android:icon="@drawable/ic_baseline_view_list_24"
+                />
+
+            <item
+                android:id="@+id/btnAddPoint"
+                android:title="@string/add_des"
+                android:icon="@drawable/add"
+                />
+
+            <item
+                android:id="@+id/btnDelPoint"
+                android:title="@string/del_des"
+                android:icon="@drawable/trashcan"
+                />
+
+        </menu>
+    </item>
+
     <item android:title="@string/route_control">
         <menu>
             <item
