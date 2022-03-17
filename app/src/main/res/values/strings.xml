@@ -121,4 +121,8 @@
     <string name="del_des">Видалити ціль</string>
     <string name="delete">Видалення</string>
     <string name="chose_destination_to_delete">Виберіть ціль яку хочете прибрати з маршруту:</string>
+    <string name="destination">Ціль: </string>
+    <string name="destination_close">Ви майже дісталися цілі!</string>
+    <string name="ask_about_current_point">Бажаєте переглянути інформацію про ціль?</string>
+    <string name="ask_pause_route">Ви впевнені що бажаєте призупинити подорож?</string>
 </resources>

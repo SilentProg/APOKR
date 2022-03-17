@@ -3,12 +3,15 @@ package com.savonikyurii.beatifulkrivbas;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.location.Location;
@@ -42,6 +45,7 @@ import java.util.Objects;
 public class ActivityRouteController extends AppCompatActivity implements BottomSheetRoute.BottomSheetRouteListener {
     private ActivityRouteControllerBinding binding;
     private AppBarConfiguration mAppBarConfiguration;
+    public static DrawerLayout drawer;
 
 
     @Override
@@ -62,12 +66,40 @@ public class ActivityRouteController extends AppCompatActivity implements Bottom
     }
 
     @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.END)) drawer.closeDrawer(GravityCompat.END);
+        else{
+            if (Navigation.findNavController(this, R.id.nav_host_fragment_route).getCurrentDestination().getId() == R.id.nav_route_controller){
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setTitle(getString(R.string.whole_route))
+                        .setMessage(R.string.ask_pause_route)
+                        .setIcon(R.drawable.warning)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.yes, (dialog, which) -> {
+                            super.onBackPressed();
+                            finish();
+                        })
+                        .setNegativeButton(R.string.NO, (dialog, which) -> {
+                            dialog.cancel();
+                        });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }else{
+                super.onBackPressed();
+            }
+        }
+    }
+
+    @Override
     public void onButtonClicked(int id) {
         switch (id){
             case R.id.btnBottomSheetStart:
                 Navigation.findNavController(this, R.id.nav_host_fragment_route).popBackStack(R.id.nav_route_controller, true);
                 Navigation.findNavController(this, R.id.nav_host_fragment_route).navigate(R.id.nav_route_controller);
-
                 break;
             case R.id.btnBottomSheetWholeRoute:
                 Navigation.findNavController(this, R.id.nav_host_fragment_route).navigate(R.id.nav_allPoints);

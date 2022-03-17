@@ -2,18 +2,29 @@ package com.savonikyurii.beatifulkrivbas;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.IconCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -26,6 +37,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -71,6 +83,9 @@ import com.savonikyurii.beatifulkrivbas.helpers.loclistener.MyLocListener;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -107,14 +122,14 @@ public class RouteController extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentRouteControllerBinding.inflate(inflater, container, false);
-        
+
         init();
         getLocationPermission();
 
         return binding.getRoot();
     }
 
-    private void sort_points(){
+    private void sort_points() {
         /*mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -158,10 +173,11 @@ public class RouteController extends Fragment implements
         super.onStart();
     }
 
-    private void init(){
+    private void init() {
         mRefData = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-
+        ActivityRouteController.drawer = binding.routeDrawer;
+        createNotificationChannel();
         init_gps();
 
         //change_current();
@@ -172,17 +188,37 @@ public class RouteController extends Fragment implements
         binding.navViewRoute.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.btnCloseDrawer: binding.routeDrawer.closeDrawer(GravityCompat.END); break;
-                    case R.id.btnChange: changeCurrentDestination(); break;
-                    case R.id.btnSkip: skipDestination(); break;
-                    case R.id.btnSkipAndMarkForVisited: skipDestinationAndMarkByVisited(); break;
-                    case R.id.btnAllRoute: allRouteVisible(); break;
-                    case R.id.btnGoogleMap: OpenGoogleMap(); break;
-                    case R.id.btnEndRoute: endRoute(); break;
-                    case R.id.btnViewPoints: NavHostFragment.findNavController(RouteController.this).navigate(R.id.nav_allPoints); break;
-                    case R.id.btnAddPoint: NavHostFragment.findNavController(RouteController.this).navigate(R.id.nav_catalog_route); break;
-                    case R.id.btnDelPoint: deletePoint(); break;
+                switch (item.getItemId()) {
+                    case R.id.btnCloseDrawer:
+                        binding.routeDrawer.closeDrawer(GravityCompat.END);
+                        break;
+                    case R.id.btnChange:
+                        changeCurrentDestination();
+                        break;
+                    case R.id.btnSkip:
+                        skipDestination();
+                        break;
+                    case R.id.btnSkipAndMarkForVisited:
+                        skipDestinationAndMarkByVisited();
+                        break;
+                    case R.id.btnAllRoute:
+                        allRouteVisible();
+                        break;
+                    case R.id.btnGoogleMap:
+                        OpenGoogleMap();
+                        break;
+                    case R.id.btnEndRoute:
+                        endRoute();
+                        break;
+                    case R.id.btnViewPoints:
+                        NavHostFragment.findNavController(RouteController.this).navigate(R.id.nav_allPoints);
+                        break;
+                    case R.id.btnAddPoint:
+                        NavHostFragment.findNavController(RouteController.this).navigate(R.id.nav_catalog_route);
+                        break;
+                    case R.id.btnDelPoint:
+                        deletePoint();
+                        break;
                 }
                 return true;
             }
@@ -190,7 +226,7 @@ public class RouteController extends Fragment implements
 
         init_listeners();
 
-        if(mGeoApiContext == null){
+        if (mGeoApiContext == null) {
             mGeoApiContext = new GeoApiContext.Builder()
                     .apiKey("AIzaSyBR5UdpoDsXIU_jax39-Yo43qKVQ_XttHU")
                     .build();
@@ -205,7 +241,7 @@ public class RouteController extends Fragment implements
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                for (DataSnapshot ds: snapshot.getChildren()) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
                     arrayAdapter.add(ds.getValue(Place.class).getTitle());
                 }
 
@@ -275,8 +311,8 @@ public class RouteController extends Fragment implements
     }
 
     private void allRouteVisible() {
-        if(allRoute){
-            if (mPolyLinesData.size()>0){
+        if (allRoute) {
+            if (mPolyLinesData.size() > 0) {
                 for (PolylineData polylineData : mPolyLinesData) {
                     polylineData.getPolyline().remove();
                 }
@@ -284,34 +320,34 @@ public class RouteController extends Fragment implements
                 mPolyLinesData = new ArrayList<>();
             }
             try {
-                calculateDirections(new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()),new LatLng(Route.getRoute().get(0).getLatitude(), Route.getRoute().get(0).getLongtude()), false, false);
-            }catch (Exception e){
+                calculateDirections(new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), new LatLng(Route.getRoute().get(0).getLatitude(), Route.getRoute().get(0).getLongtude()), false, false);
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-            for (int i = 0; i < Route.getRoute().size(); i++){
+            for (int i = 0; i < Route.getRoute().size(); i++) {
                 try {
 
-                    calculateDirections(new LatLng(Route.getRoute().get(i).getLatitude(),Route.getRoute().get(i).getLongtude()), new LatLng(Route.getRoute().get(i+1).getLatitude(),Route.getRoute().get(i+1).getLongtude()), false, false);
+                    calculateDirections(new LatLng(Route.getRoute().get(i).getLatitude(), Route.getRoute().get(i).getLongtude()), new LatLng(Route.getRoute().get(i + 1).getLatitude(), Route.getRoute().get(i + 1).getLongtude()), false, false);
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
             try {
-                calculateDirections(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), false, false);
-            }catch (Exception e){
+                calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), false, false);
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
             allRoute = false;
             binding.navViewRoute.getMenu().findItem(R.id.btnAllRoute).setTitle(R.string.route_to_destination);
             binding.routeDrawer.closeDrawer(GravityCompat.END);
-        }else{
+        } else {
             try {
                 allRoute = true;
                 binding.navViewRoute.getMenu().findItem(R.id.btnAllRoute).setTitle(R.string.all_route);
-                calculateDirections(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), true, true);
+                calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), true, true);
                 binding.routeDrawer.closeDrawer(GravityCompat.END);
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -325,20 +361,20 @@ public class RouteController extends Fragment implements
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
 
-                        if (Route.getRoute().size()>0){
+                        if (Route.getRoute().size() > 0) {
 
                             mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if(snapshot.hasChildren()) {
+                                    if (snapshot.hasChildren()) {
                                         Place place = new Place();
-                                        for (DataSnapshot ds: snapshot.getChildren()) {
+                                        for (DataSnapshot ds : snapshot.getChildren()) {
                                             place = ds.getValue(Place.class);
                                         }
                                         mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(place.getTitle()).removeValue();
                                         mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("other").child(place.getTitle()).setValue(place);
                                         mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
-                                    }else {
+                                    } else {
                                         mRefData.child("userdata").child(mAuth.getUid()).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
                                     }
 
@@ -349,7 +385,7 @@ public class RouteController extends Fragment implements
                                     mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            for (DataSnapshot  data: snapshot.getChildren()) {
+                                            for (DataSnapshot data : snapshot.getChildren()) {
                                                 Place temp = data.getValue(Place.class);
                                                 calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(temp.getLatitude(), temp.getLongtude()), true, true);
                                                 binding.routeDrawer.closeDrawer(GravityCompat.END);
@@ -369,7 +405,7 @@ public class RouteController extends Fragment implements
                                 }
                             });
                             updateCounter();
-                        }else {
+                        } else {
                             final AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
                             b.setTitle(getActivity().getString(R.string.warning))
                                     .setMessage(R.string.end_route_warning)
@@ -380,15 +416,15 @@ public class RouteController extends Fragment implements
                                             mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    if(snapshot.hasChildren()) {
+                                                    if (snapshot.hasChildren()) {
                                                         Place place = new Place();
-                                                        for (DataSnapshot ds: snapshot.getChildren()) {
+                                                        for (DataSnapshot ds : snapshot.getChildren()) {
                                                             place = ds.getValue(Place.class);
                                                         }
                                                         mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(place.getTitle()).removeValue();
                                                         mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("other").child(place.getTitle()).setValue(place);
                                                         mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
-                                                    }else {
+                                                    } else {
                                                         mRefData.child("userdata").child(mAuth.getUid()).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
                                                     }
 
@@ -433,7 +469,7 @@ public class RouteController extends Fragment implements
                 .setIcon(R.drawable.skip)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        if (Route.getRoute().size()>0){
+                        if (Route.getRoute().size() > 0) {
                             mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
                             mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getRoute().get(0).getTitle()).setValue(Route.getRoute().get(0));
                             mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("allDestination").child(Route.getRoute().get(0).getTitle()).removeValue();
@@ -441,7 +477,7 @@ public class RouteController extends Fragment implements
                             mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    for (DataSnapshot  data: snapshot.getChildren()) {
+                                    for (DataSnapshot data : snapshot.getChildren()) {
                                         Place temp = data.getValue(Place.class);
                                         calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(temp.getLatitude(), temp.getLongtude()), true, true);
                                         binding.routeDrawer.closeDrawer(GravityCompat.END);
@@ -454,7 +490,7 @@ public class RouteController extends Fragment implements
                                 }
                             });
 
-                        }else {
+                        } else {
                             final AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
                             b.setTitle(getActivity().getString(R.string.warning))
                                     .setMessage(R.string.end_route_warning)
@@ -467,12 +503,12 @@ public class RouteController extends Fragment implements
                                             Objects.requireNonNull(getActivity()).finish();
                                         }
                                     })
-                            .setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
+                                    .setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    });
                             final AlertDialog a = b.create();
                             a.show();
                         }
@@ -496,7 +532,7 @@ public class RouteController extends Fragment implements
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item);
-                for (DataSnapshot ds: snapshot.getChildren()) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
                     arrayAdapter.add(ds.getValue(Place.class).getTitle());
                 }
 
@@ -524,7 +560,7 @@ public class RouteController extends Fragment implements
                         mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").child(oldP.getTitle()).setValue(oldP);
                         mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").child(newP.getTitle()).removeValue();
                         Route.setCurrentDestination(newP);
-                        calculateDirections(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()), new LatLng(newP.getLatitude(), newP.getLongtude()), true, true);
+                        calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(newP.getLatitude(), newP.getLongtude()), true, true);
 
                         allRoute = true;
                         binding.navViewRoute.getMenu().findItem(R.id.btnAllRoute).setTitle(R.string.all_route);
@@ -544,19 +580,19 @@ public class RouteController extends Fragment implements
         });
     }
 
-    private void init_gps(){
+    private void init_gps() {
         locationManager = (LocationManager) Objects.requireNonNull(getActivity()).getSystemService(Context.LOCATION_SERVICE);
         locListener = new MyLocListener();
         locListener.setLocListenerInterface(this);
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2, 1, locListener);
-        }else{
+        } else {
             getLocationPermission();
         }
     }
 
 
-    private void init_listeners(){
+    private void init_listeners() {
         binding.btnAboutCurrentRouteController.setOnClickListener(this::onBtnAboutClick);
         binding.btnOpenControlMenu.setOnClickListener(this::onBtnMenuClick);
         binding.btnAboutNext.setOnClickListener(this::onBtnAboutNextClick);
@@ -572,7 +608,7 @@ public class RouteController extends Fragment implements
         binding.routeDrawer.openDrawer(GravityCompat.END);
     }
 
-    private void OpenGoogleMap(){
+    private void OpenGoogleMap() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.open_google_map)
                 .setCancelable(true)
@@ -585,12 +621,12 @@ public class RouteController extends Fragment implements
                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                         mapIntent.setPackage("com.google.android.apps.maps");
 
-                        try{
+                        try {
                             if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                                 startActivity(mapIntent);
                             }
-                        }catch (NullPointerException e){
-                            Log.e(TAG, "onClick: NullPointerException: Couldn't open map." + e.getMessage() );
+                        } catch (NullPointerException e) {
+                            Log.e(TAG, "onClick: NullPointerException: Couldn't open map." + e.getMessage());
                             Toast.makeText(getActivity(), "Couldn't open map", Toast.LENGTH_SHORT).show();
                         }
 
@@ -630,97 +666,98 @@ public class RouteController extends Fragment implements
             currentLocation = mMap.getMyLocation();
         }
 
-        
+
         CustomInfoWindowGoogleMap infoWindowGoogleMap = new CustomInfoWindowGoogleMap(getActivity());
         mMap.setInfoWindowAdapter(infoWindowGoogleMap);
 
-          mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").addValueEventListener(new ValueEventListener() {
-              @Override
-              public void onDataChange(@NonNull DataSnapshot snapshot) {
-                  if (snapshot.hasChildren()){
-                      for (DataSnapshot ds: snapshot.getChildren()) {
-                          Place temp = ds.getValue(Place.class);
-                          Route.setCurrentDestination(temp);
-                          list_places.add(temp);
-                          current = temp;
-                      }
-                      binding.placeTitleCurrentroutecontroller.setText(Route.getCurrentDestination().getTitle());
-                      Picasso.get().load(Route.getCurrentDestination().getImageuri()).into(binding.imageRoutecontrollcurrent);
-                      LatLng temp = new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude());
-                      MarkerOptions marker = new MarkerOptions().position(temp);
-                      Marker m = mMap.addMarker(marker);
-                      m.setTag(Route.getCurrentDestination());
-                      list_markers.add(0, m);
-                      mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude()), 15));
-                  }
-              }
-              @Override
-              public void onCancelled(@NonNull DatabaseError error) {
+        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChildren()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        Place temp = ds.getValue(Place.class);
+                        Route.setCurrentDestination(temp);
+                        list_places.add(temp);
+                        current = temp;
+                    }
+                    binding.placeTitleCurrentroutecontroller.setText(Route.getCurrentDestination().getTitle());
+                    Picasso.get().load(Route.getCurrentDestination().getImageuri()).into(binding.imageRoutecontrollcurrent);
+                    LatLng temp = new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude());
+                    MarkerOptions marker = new MarkerOptions().position(temp);
+                    Marker m = mMap.addMarker(marker);
+                    m.setTag(Route.getCurrentDestination());
+                    list_markers.add(0, m);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), 15));
+                }
+            }
 
-              }
-          });
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
-    private void getDeviceLocation(){
+    private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
-        try{
-            if(mLocationPermissionsGranted){
+        try {
+            if (mLocationPermissionsGranted) {
 
                 final Task location = mFusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: found location!");
                             currentLocation = (Location) task.getResult();
 
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM);
-                            calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),new LatLng(Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude()), true, true);
-                        }else{
+                            calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude()), true, true);
+                        } else {
                             Log.d(TAG, "onComplete: current location is null");
                             Toast.makeText(getActivity(), "unable to get current location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
-        }catch (SecurityException e){
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
+        } catch (SecurityException e) {
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom){
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+    private void moveCamera(LatLng latLng, float zoom) {
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
-    private void getLocationPermission(){
+    private void getLocationPermission() {
         Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(getActivity(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(getActivity(),
-                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(getActivity(),
+                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true;
                 initMap();
-            }else{
+            } else {
                 ActivityCompat.requestPermissions(getActivity(),
                         permissions,
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
-        }else{
+        } else {
             ActivityCompat.requestPermissions(getActivity(),
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
 
-    private void initMap(){
+    private void initMap() {
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapCurrentRoute);
 
@@ -732,11 +769,11 @@ public class RouteController extends Fragment implements
         Log.d(TAG, "onRequestPermissionsResult: called.");
         mLocationPermissionsGranted = false;
 
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0){
-                    for(int i = 0; i < grantResults.length; i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             mLocationPermissionsGranted = false;
                             Log.d(TAG, "onRequestPermissionsResult: permission failed");
                             return;
@@ -751,14 +788,14 @@ public class RouteController extends Fragment implements
         }
     }
 
-    private void init_current(){
+    private void init_current() {
 
         mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.hasChildren()){
-                    if (Route.getRoute().size()>0) Route.getRoute().clear();
-                    for (DataSnapshot ds: snapshot.getChildren()) {
+                if (snapshot.hasChildren()) {
+                    if (Route.getRoute().size() > 0) Route.getRoute().clear();
+                    for (DataSnapshot ds : snapshot.getChildren()) {
                         Place temp = ds.getValue(Place.class);
                         Route.addPlace(temp);
                     }
@@ -766,11 +803,11 @@ public class RouteController extends Fragment implements
                     try {
                         binding.textTitleNext.setText(Route.getRoute().get(0).getTitle());
                         Picasso.get().load(Route.getRoute().get(0).getImageuri()).placeholder(R.drawable.image_placeholder).into(binding.imgNext);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                         binding.containerTop.setVisibility(View.GONE);
                     }
-                }else {
+                } else {
                     binding.containerTop.setVisibility(View.GONE);
                 }
             }
@@ -782,11 +819,11 @@ public class RouteController extends Fragment implements
         });
     }
 
-    private void init_markers(){
+    private void init_markers() {
         list_places.clear();
         list_places.add(current);
         list_places.addAll(Route.getRoute());
-        for (Place place: Route.getRoute()) {
+        for (Place place : Route.getRoute()) {
             LatLng temp = new LatLng(place.getLatitude(), place.getLongtude());
             MarkerOptions marker = new MarkerOptions().position(temp);
             Marker m = mMap.addMarker(marker);
@@ -795,7 +832,7 @@ public class RouteController extends Fragment implements
         }
     }
 
-    private void calculateDirections(LatLng start, LatLng end, boolean alt, boolean isClear){
+    private void calculateDirections(LatLng start, LatLng end, boolean alt, boolean isClear) {
 
         Log.d(TAG, "calculateDirections: calculating directions.");
 
@@ -825,19 +862,19 @@ public class RouteController extends Fragment implements
 
             @Override
             public void onFailure(Throwable e) {
-                Log.e(TAG, "calculateDirections: Failed to get directions: " + e.getMessage() );
+                Log.e(TAG, "calculateDirections: Failed to get directions: " + e.getMessage());
 
             }
         });
     }
 
-    private void addPolylinesToMap(final DirectionsResult result, boolean isClear){
+    private void addPolylinesToMap(final DirectionsResult result, boolean isClear) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "run: result routes: " + result.routes.length);
-                if (isClear){
-                    if (mPolyLinesData.size()>0){
+                if (isClear) {
+                    if (mPolyLinesData.size() > 0) {
                         for (PolylineData polylineData : mPolyLinesData) {
                             polylineData.getPolyline().remove();
                         }
@@ -846,14 +883,14 @@ public class RouteController extends Fragment implements
                     }
                 }
                 double duration = 999999999;
-                for(DirectionsRoute route: result.routes){
+                for (DirectionsRoute route : result.routes) {
                     Log.d(TAG, "run: leg: " + route.legs[0].toString());
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
 
                     List<LatLng> newDecodedPath = new ArrayList<>();
 
                     // This loops through all the LatLng coordinates of ONE polyline.
-                    for(com.google.maps.model.LatLng latLng: decodedPath){
+                    for (com.google.maps.model.LatLng latLng : decodedPath) {
 
 //                        Log.d(TAG, "run: latlng: " + latLng.toString());
 
@@ -868,7 +905,7 @@ public class RouteController extends Fragment implements
                     mPolyLinesData.add(new PolylineData(polyline, route.legs[0]));
 
                     double tempDuration = route.legs[0].duration.inSeconds;
-                    if(tempDuration < duration){
+                    if (tempDuration < duration) {
                         duration = tempDuration;
                         onPolylineClick(polyline);
                     }
@@ -898,9 +935,9 @@ public class RouteController extends Fragment implements
 
     @Override
     public void onPolylineClick(Polyline polyline) {
-        for(PolylineData polylineData: mPolyLinesData){
+        for (PolylineData polylineData : mPolyLinesData) {
             Log.d(TAG, "onPolylineClick: toString: " + polylineData.toString());
-            if(polyline.getId().equals(polylineData.getPolyline().getId())){
+            if (polyline.getId().equals(polylineData.getPolyline().getId())) {
                 polylineData.getPolyline().setColor(ContextCompat.getColor(getActivity(), R.color.highlight));
                 polylineData.getPolyline().setZIndex(1);
 
@@ -911,8 +948,7 @@ public class RouteController extends Fragment implements
                 currentDuration = polylineData.getLeg().duration;
                 //Toast.makeText(getActivity(), currentDuration.toString(), Toast.LENGTH_SHORT).show();
                 zoomRoute(polyline.getPoints());
-            }
-            else{
+            } else {
                 polylineData.getPolyline().setColor(ContextCompat.getColor(getActivity(), R.color.darkgray));
                 polylineData.getPolyline().setZIndex(0);
             }
@@ -926,7 +962,7 @@ public class RouteController extends Fragment implements
         return results[0];
     }
 
-    private void updateCounter(){
+    private void updateCounter() {
         mRefData.child("userdata").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("userInfo").child("count").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -942,13 +978,136 @@ public class RouteController extends Fragment implements
         });
     }
 
+
+    private String CHANNEL_ID = "channelID";
+    private String CHANNEL_NAME = "channelNAME";
+    private String CHANNEL_DESC = "channelDESC";
+    private int NOTIFICATION_ID = 0;
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = CHANNEL_NAME;
+            String description = CHANNEL_DESC;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
     @Override
     public void onChangeLocation(Location loc) {
         currentLocation = loc;
-        if (calculateDistance(new LatLng(loc.getLatitude(),loc.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude()))<=100){
-            Snackbar.make(binding.getRoot(), "LOX", BaseTransientBottomBar.LENGTH_SHORT).show();
+        if (calculateDistance(new LatLng(loc.getLatitude(), loc.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude())) <= 100) {
             updateCounter();
+
+            //PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, getActivity().getIntent(), PendingIntent.FLAG_NO_CREATE);
+
+            try {
+                NotificationCompat.Builder builder =
+                        null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    builder = new NotificationCompat.Builder(getActivity(), CHANNEL_ID)
+                            .setSmallIcon(R.drawable.notify)
+                            .setContentTitle(getActivity().getString(R.string.destination) + Route.getCurrentDestination().getTitle())
+                            .setContentText(getString(R.string.destination_close))
+                            //.addAction(R.drawable.notify, "lOx", pendingIntent)
+                            .setAutoCancel(true)
+                            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(getActivity().getString(R.string.ask_about_current_point) + "\n" + Route.getCurrentDestination().getBigdescription()))
+                            .setPriority(NotificationCompat.PRIORITY_MAX);
+                }
+
+
+                Notification notification = builder.build();
+
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+                notificationManager.notify(NOTIFICATION_ID, notification);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+
+            if (Route.getRoute().size() > 0) {
+
+                mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.hasChildren()) {
+                            Place place = new Place();
+                            for (DataSnapshot ds : snapshot.getChildren()) {
+                                place = ds.getValue(Place.class);
+                            }
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(place.getTitle()).removeValue();
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("other").child(place.getTitle()).setValue(place);
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
+                        } else {
+                            mRefData.child("userdata").child(mAuth.getUid()).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
+                        }
+
+                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
+                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getRoute().get(0).getTitle()).setValue(Route.getRoute().get(0));
+                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("allDestination").child(Route.getRoute().get(0).getTitle()).removeValue();
+                        Route.removeByIndex(0);
+                        mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot data : snapshot.getChildren()) {
+                                    Place temp = data.getValue(Place.class);
+                                    calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(temp.getLatitude(), temp.getLongtude()), true, true);
+                                    binding.routeDrawer.closeDrawer(GravityCompat.END);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            } else {
+                mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.hasChildren()) {
+                            Place place = new Place();
+                            for (DataSnapshot ds : snapshot.getChildren()) {
+                                place = ds.getValue(Place.class);
+                            }
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(place.getTitle()).removeValue();
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("other").child(place.getTitle()).setValue(place);
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
+                        } else {
+                            mRefData.child("userdata").child(mAuth.getUid()).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
+                        }
+
+                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
+                        //startActivity(new Intent(getActivity(), MainActivity.class));
+                        locationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER,false);
+                        try {
+                            Objects.requireNonNull(getActivity()).finish();
+                        }catch (Exception e){
+                            System.out.println(e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
         }
-        //Snackbar.make(binding.mainContainer.getRootView(), loc.getLatitude()+" | "+loc.getLongitude() + " | " + calculateDistance(loc.getLatitude(),loc.getLongitude(),Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude()), BaseTransientBottomBar.LENGTH_SHORT).show();
     }
 }
