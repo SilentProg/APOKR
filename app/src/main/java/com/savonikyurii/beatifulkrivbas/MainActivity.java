@@ -28,6 +28,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.savonikyurii.beatifulkrivbas.helpers.Place;
 import com.savonikyurii.beatifulkrivbas.helpers.User;
 import com.savonikyurii.beatifulkrivbas.ui.BottomSheetRoute;
 
@@ -46,6 +48,10 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements BottomSheetRoute.BottomSheetRouteListener{
 
@@ -70,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+        //UpdateCounter();
         setSupportActionBar(toolbar);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -111,8 +118,29 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
             // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, CODE_LOCATION);
         }
-        //Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.nav_home);
+
     }
+
+    public void UpdateCounter(){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        ref.child("userdata").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("visited").child("other").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Place> places = new ArrayList<>();
+                for (DataSnapshot ds: snapshot.getChildren()) {
+                    places.add(ds.getValue(Place.class));
+                }
+                int count = places.size()+1;
+                ref.child("userdata").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("userInfo").child("count").setValue(count);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

@@ -89,6 +89,20 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+
+        mRefData.child("userdata").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("userInfo").child("count").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int count = snapshot.getValue(Integer.class);
+                binding.numberOfVisitedPlaces.setText(String.valueOf(count));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void initRoute(){

@@ -54,20 +54,20 @@ public class ActivityRouteController extends AppCompatActivity implements Bottom
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_route_controller, R.id.nav_details_route)
                 .build();
+
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_route);
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(binding.toolbarRouteController, navController);
-
     }
 
     @Override
     public void onButtonClicked(int id) {
         switch (id){
             case R.id.btnBottomSheetStart:
-                Navigation.findNavController(this, R.id.nav_host_fragment_route).popBackStack(R.id.nav_details_route, true);
+                Navigation.findNavController(this, R.id.nav_host_fragment_route).popBackStack(R.id.nav_route_controller, true);
                 Navigation.findNavController(this, R.id.nav_host_fragment_route).navigate(R.id.nav_route_controller);
-                Navigation.findNavController(this, R.id.nav_host_fragment_route).popBackStack(R.id.nav_details_route, true);
+
                 break;
             case R.id.btnBottomSheetWholeRoute:
                 Navigation.findNavController(this, R.id.nav_host_fragment_route).navigate(R.id.nav_allPoints);

@@ -156,7 +156,6 @@ public class RouteController extends Fragment implements
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     private void init(){
@@ -200,6 +199,57 @@ public class RouteController extends Fragment implements
     }
 
     private void deletePoint() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item);
+        mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot ds: snapshot.getChildren()) {
+                    arrayAdapter.add(ds.getValue(Place.class).getTitle());
+                }
+
+                builder.setTitle(getActivity().getString(R.string.delete))
+                        .setIcon(R.drawable.trashcan)
+                        .setCancelable(true)
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Place del = Route.getRoute().get(which);
+
+                        final AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+                        b.setTitle(getActivity().getString(R.string.delete))
+                                .setIcon(R.drawable.trashcan)
+                                .setMessage(R.string.delete_ask)
+                                .setPositiveButton(R.string.yes, (dialog1, which1) -> {
+                                    mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").child(del.getTitle()).removeValue();
+                                    Route.removeByIndex(which);
+                                })
+                                .setNegativeButton(R.string.NO, (dialog1, which1) -> {
+                                    dialog.cancel();
+                                    dialog1.cancel();
+                                });
+                        AlertDialog d = b.create();
+                        d.show();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void endRoute() {
@@ -318,6 +368,7 @@ public class RouteController extends Fragment implements
 
                                 }
                             });
+                            updateCounter();
                         }else {
                             final AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
                             b.setTitle(getActivity().getString(R.string.warning))
@@ -351,6 +402,7 @@ public class RouteController extends Fragment implements
 
                                                 }
                                             });
+                                            updateCounter();
                                         }
                                     })
                                     .setNegativeButton(R.string.NO, new DialogInterface.OnClickListener() {
@@ -874,11 +926,28 @@ public class RouteController extends Fragment implements
         return results[0];
     }
 
+    private void updateCounter(){
+        mRefData.child("userdata").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("userInfo").child("count").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int count = snapshot.getValue(Integer.class);
+                ++count;
+                mRefData.child("userdata").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("userInfo").child("count").setValue(count);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     @Override
     public void onChangeLocation(Location loc) {
         currentLocation = loc;
         if (calculateDistance(new LatLng(loc.getLatitude(),loc.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude()))<=100){
             Snackbar.make(binding.getRoot(), "LOX", BaseTransientBottomBar.LENGTH_SHORT).show();
+            updateCounter();
         }
         //Snackbar.make(binding.mainContainer.getRootView(), loc.getLatitude()+" | "+loc.getLongitude() + " | " + calculateDistance(loc.getLatitude(),loc.getLongitude(),Route.getCurrentDestination().getLatitude(),Route.getCurrentDestination().getLongtude()), BaseTransientBottomBar.LENGTH_SHORT).show();
     }

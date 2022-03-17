@@ -119,4 +119,6 @@
     <string name="d_route">Цілі маршрута</string>
     <string name="add_des">Додати ціль</string>
     <string name="del_des">Видалити ціль</string>
+    <string name="delete">Видалення</string>
+    <string name="chose_destination_to_delete">Виберіть ціль яку хочете прибрати з маршруту:</string>
 </resources>
