@@ -125,4 +125,6 @@
     <string name="destination_close">Ви майже дісталися цілі!</string>
     <string name="ask_about_current_point">Бажаєте переглянути інформацію про ціль?</string>
     <string name="ask_pause_route">Ви впевнені що бажаєте призупинити подорож?</string>
+    <string name="no_points">Не має цілей для заміни!</string>
+    <string name="no_point_for_delete">Не має цілей для видалення!</string>
 </resources>

@@ -244,37 +244,50 @@ public class RouteController extends Fragment implements
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     arrayAdapter.add(ds.getValue(Place.class).getTitle());
                 }
+                if (arrayAdapter.isEmpty()){
+                    builder
+                            .setTitle(R.string.warning)
+                            .setMessage(R.string.no_point_for_delete)
+                            .setIcon(R.drawable.warning)
+                            .setCancelable(true)
+                            .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
-                builder.setTitle(getActivity().getString(R.string.delete))
-                        .setIcon(R.drawable.trashcan)
-                        .setCancelable(true)
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Place del = Route.getRoute().get(which);
-
-                        final AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
-                        b.setTitle(getActivity().getString(R.string.delete))
-                                .setIcon(R.drawable.trashcan)
-                                .setMessage(R.string.delete_ask)
-                                .setPositiveButton(R.string.yes, (dialog1, which1) -> {
-                                    mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").child(del.getTitle()).removeValue();
-                                    Route.removeByIndex(which);
-                                })
-                                .setNegativeButton(R.string.NO, (dialog1, which1) -> {
+                                }
+                            });
+                }else {
+                    builder.setTitle(getActivity().getString(R.string.delete))
+                            .setIcon(R.drawable.trashcan)
+                            .setCancelable(true)
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
                                     dialog.cancel();
-                                    dialog1.cancel();
-                                });
-                        AlertDialog d = b.create();
-                        d.show();
-                    }
-                });
+                                }
+                            });
+                    builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Place del = Route.getRoute().get(which);
+
+                            final AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+                            b.setTitle(getActivity().getString(R.string.delete))
+                                    .setIcon(R.drawable.trashcan)
+                                    .setMessage(R.string.delete_ask)
+                                    .setPositiveButton(R.string.yes, (dialog1, which1) -> {
+                                        mRefData.child("userdata").child(mAuth.getUid()).child("route").child("allDestination").child(del.getTitle()).removeValue();
+                                        Route.removeByIndex(which);
+                                    })
+                                    .setNegativeButton(R.string.NO, (dialog1, which1) -> {
+                                        dialog.cancel();
+                                        dialog1.cancel();
+                                    });
+                            AlertDialog d = b.create();
+                            d.show();
+                        }
+                    });
+                }
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -536,7 +549,20 @@ public class RouteController extends Fragment implements
                     arrayAdapter.add(ds.getValue(Place.class).getTitle());
                 }
 
-                builder
+                if(arrayAdapter.isEmpty()){
+                    builder
+                            .setTitle(R.string.warning)
+                            .setMessage(R.string.no_points)
+                            .setCancelable(true)
+                            .setIcon(R.drawable.warning)
+                            .setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                }else {
+                    builder
                         .setTitle(R.string.chopse_destination)
                         .setIcon(R.drawable.chose)
                         .setCancelable(true)
@@ -568,6 +594,8 @@ public class RouteController extends Fragment implements
                         binding.routeDrawer.closeDrawer(GravityCompat.END);
                     }
                 });
+                }
+
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -1003,7 +1031,7 @@ public class RouteController extends Fragment implements
     @Override
     public void onChangeLocation(Location loc) {
         currentLocation = loc;
-        if (calculateDistance(new LatLng(loc.getLatitude(), loc.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude())) <= 100) {
+        if (calculateDistance(new LatLng(loc.getLatitude(), loc.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude())) <= 200) {
             updateCounter();
 
             //PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, getActivity().getIntent(), PendingIntent.FLAG_NO_CREATE);
