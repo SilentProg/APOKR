@@ -97,23 +97,11 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     private void onLoginClick(View view){
-        //startActivity(new Intent(ActivityLogin.this, MainActivity.class));
-//        try {
-//            email = text_email.getText().toString();
-//        }catch (Exception ex){
-//            Snackbar.make(ActivityLogin.this, view, getString(R.string.email_error), BaseTransientBottomBar.LENGTH_LONG).show();
-//            return;
-//        }
-//
-//        try {
-//            password = text_password.getText().toString();
-//        }catch (Exception ex){
-//            Snackbar.make(ActivityLogin.this, view, getString(R.string.password_error), BaseTransientBottomBar.LENGTH_LONG).show();
-//            return;
-//        }
         FirebaseAuth.getInstance().signOut();
-        email = text_email.getText().toString();
-        password = text_password.getText().toString();
+
+        email = text_email.getText().toString().trim();
+        password = text_password.getText().toString().trim();
+
         if (TextUtils.isEmpty(email)){
             text_email.setError(getResources().getString(R.string.email_error));
             //Snackbar.make(ActivityLogin.this, view, getString(R.string.email_error), BaseTransientBottomBar.LENGTH_LONG).show();

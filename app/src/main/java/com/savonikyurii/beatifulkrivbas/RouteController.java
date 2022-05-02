@@ -5,16 +5,12 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,7 +20,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.IconCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -37,7 +32,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -54,11 +48,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.compat.PlaceDetectionClient;
-import com.google.android.libraries.places.compat.Places;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -68,14 +58,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.maps.DirectionsApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PendingResult;
-import com.google.maps.PlacesApi;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.Duration;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentRouteControllerBinding;
 import com.savonikyurii.beatifulkrivbas.helpers.CustomInfoWindowGoogleMap;
-import com.savonikyurii.beatifulkrivbas.helpers.Place;
+import com.savonikyurii.beatifulkrivbas.API.Place;
 import com.savonikyurii.beatifulkrivbas.helpers.PolylineData;
 import com.savonikyurii.beatifulkrivbas.helpers.Route;
 import com.savonikyurii.beatifulkrivbas.helpers.loclistener.LocListenerInterface;
@@ -83,9 +72,6 @@ import com.savonikyurii.beatifulkrivbas.helpers.loclistener.MyLocListener;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -171,6 +157,7 @@ public class RouteController extends Fragment implements
     @Override
     public void onStart() {
         super.onStart();
+
     }
 
     private void init() {
@@ -179,7 +166,6 @@ public class RouteController extends Fragment implements
         ActivityRouteController.drawer = binding.routeDrawer;
         createNotificationChannel();
         init_gps();
-
         //change_current();
 
 
@@ -1031,110 +1017,112 @@ public class RouteController extends Fragment implements
     @Override
     public void onChangeLocation(Location loc) {
         currentLocation = loc;
-        if (calculateDistance(new LatLng(loc.getLatitude(), loc.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude())) <= 200) {
-            updateCounter();
+        if (loc != null) {
+            if (calculateDistance(new LatLng(loc.getLatitude(), loc.getLongitude()), new LatLng(Route.getCurrentDestination().getLatitude(), Route.getCurrentDestination().getLongtude())) <= 200) {
+                updateCounter();
 
-            //PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, getActivity().getIntent(), PendingIntent.FLAG_NO_CREATE);
+                //PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, getActivity().getIntent(), PendingIntent.FLAG_NO_CREATE);
 
-            try {
-                NotificationCompat.Builder builder =
-                        null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    builder = new NotificationCompat.Builder(getActivity(), CHANNEL_ID)
-                            .setSmallIcon(R.drawable.notify)
-                            .setContentTitle(getActivity().getString(R.string.destination) + Route.getCurrentDestination().getTitle())
-                            .setContentText(getString(R.string.destination_close))
-                            //.addAction(R.drawable.notify, "lOx", pendingIntent)
-                            .setAutoCancel(true)
-                            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                            .setStyle(new NotificationCompat.BigTextStyle()
-                                    .bigText(getActivity().getString(R.string.ask_about_current_point) + "\n" + Route.getCurrentDestination().getBigdescription()))
-                            .setPriority(NotificationCompat.PRIORITY_MAX);
+                try {
+                    NotificationCompat.Builder builder =
+                            null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        builder = new NotificationCompat.Builder(getActivity(), CHANNEL_ID)
+                                .setSmallIcon(R.drawable.notify)
+                                .setContentTitle(getActivity().getString(R.string.destination) + Route.getCurrentDestination().getTitle())
+                                .setContentText(getString(R.string.destination_close))
+                                //.addAction(R.drawable.notify, "lOx", pendingIntent)
+                                .setAutoCancel(true)
+                                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                                .setStyle(new NotificationCompat.BigTextStyle()
+                                        .bigText(getActivity().getString(R.string.ask_about_current_point) + "\n" + Route.getCurrentDestination().getBigdescription()))
+                                .setPriority(NotificationCompat.PRIORITY_MAX);
+                    }
+
+
+                    Notification notification = builder.build();
+
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+                    notificationManager.notify(NOTIFICATION_ID, notification);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
 
+                if (Route.getRoute().size() > 0) {
 
-                Notification notification = builder.build();
-
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
-                notificationManager.notify(NOTIFICATION_ID, notification);
-            }catch (Exception e){
-                System.out.println(e.getMessage());
-            }
-
-            if (Route.getRoute().size() > 0) {
-
-                mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.hasChildren()) {
-                            Place place = new Place();
-                            for (DataSnapshot ds : snapshot.getChildren()) {
-                                place = ds.getValue(Place.class);
-                            }
-                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(place.getTitle()).removeValue();
-                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("other").child(place.getTitle()).setValue(place);
-                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
-                        } else {
-                            mRefData.child("userdata").child(mAuth.getUid()).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
-                        }
-
-                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
-                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getRoute().get(0).getTitle()).setValue(Route.getRoute().get(0));
-                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("allDestination").child(Route.getRoute().get(0).getTitle()).removeValue();
-                        Route.removeByIndex(0);
-                        mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for (DataSnapshot data : snapshot.getChildren()) {
-                                    Place temp = data.getValue(Place.class);
-                                    calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(temp.getLatitude(), temp.getLongtude()), true, true);
-                                    binding.routeDrawer.closeDrawer(GravityCompat.END);
+                    mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.hasChildren()) {
+                                Place place = new Place();
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    place = ds.getValue(Place.class);
                                 }
+                                mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(place.getTitle()).removeValue();
+                                mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("other").child(place.getTitle()).setValue(place);
+                                mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
+                            } else {
+                                mRefData.child("userdata").child(mAuth.getUid()).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
                             }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getRoute().get(0).getTitle()).setValue(Route.getRoute().get(0));
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("allDestination").child(Route.getRoute().get(0).getTitle()).removeValue();
+                            Route.removeByIndex(0);
+                            mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for (DataSnapshot data : snapshot.getChildren()) {
+                                        Place temp = data.getValue(Place.class);
+                                        calculateDirections(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), new LatLng(temp.getLatitude(), temp.getLongtude()), true, true);
+                                        binding.routeDrawer.closeDrawer(GravityCompat.END);
+                                    }
+                                }
 
-                            }
-                        });
-                    }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            } else {
-                mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.hasChildren()) {
-                            Place place = new Place();
-                            for (DataSnapshot ds : snapshot.getChildren()) {
-                                place = ds.getValue(Place.class);
-                            }
-                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(place.getTitle()).removeValue();
-                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("other").child(place.getTitle()).setValue(place);
-                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
-                        } else {
-                            mRefData.child("userdata").child(mAuth.getUid()).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
+                                }
+                            });
                         }
 
-                        mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
-                        //startActivity(new Intent(getActivity(), MainActivity.class));
-                        locationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER,false);
-                        try {
-                            Objects.requireNonNull(getActivity()).finish();
-                        }catch (Exception e){
-                            System.out.println(e.getMessage());
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
-                    }
+                    });
+                } else {
+                    mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.hasChildren()) {
+                                Place place = new Place();
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    place = ds.getValue(Place.class);
+                                }
+                                mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(place.getTitle()).removeValue();
+                                mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("other").child(place.getTitle()).setValue(place);
+                                mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
+                            } else {
+                                mRefData.child("userdata").child(mAuth.getUid()).child("visited").child("last").child(Route.getCurrentDestination().getTitle()).setValue(Route.getCurrentDestination());
+                            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                            mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
+                            //startActivity(new Intent(getActivity(), MainActivity.class));
+                            locationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, false);
+                            try {
+                                Objects.requireNonNull(getActivity()).finish();
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                            }
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
             }
         }
     }

@@ -111,7 +111,7 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="@color/white">
+        android:background="@color/WHITE">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/containerTop"
@@ -193,7 +193,6 @@
             android:id="@+id/nav_view_route"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

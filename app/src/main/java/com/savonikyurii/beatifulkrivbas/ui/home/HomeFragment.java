@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,8 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.savonikyurii.beatifulkrivbas.ActivityRouteController;
 import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentHomeBinding;
-import com.savonikyurii.beatifulkrivbas.helpers.Place;
-import com.savonikyurii.beatifulkrivbas.helpers.User;
+import com.savonikyurii.beatifulkrivbas.API.Place;
+import com.savonikyurii.beatifulkrivbas.API.User;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 import com.squareup.picasso.Picasso;
 

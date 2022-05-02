@@ -1,8 +1,6 @@
 package com.savonikyurii.beatifulkrivbas;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -12,35 +10,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.savonikyurii.beatifulkrivbas.databinding.ActivityRouteControllerBinding;
-import com.savonikyurii.beatifulkrivbas.helpers.Place;
-import com.savonikyurii.beatifulkrivbas.helpers.Route;
-import com.savonikyurii.beatifulkrivbas.helpers.loclistener.LocListenerInterface;
 import com.savonikyurii.beatifulkrivbas.ui.BottomSheetRoute;
-import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
-import com.savonikyurii.beatifulkrivbas.ui.home.HomeFragment;
-import com.squareup.picasso.Picasso;
-
-import java.util.Objects;
 
 public class ActivityRouteController extends AppCompatActivity implements BottomSheetRoute.BottomSheetRouteListener {
     private ActivityRouteControllerBinding binding;

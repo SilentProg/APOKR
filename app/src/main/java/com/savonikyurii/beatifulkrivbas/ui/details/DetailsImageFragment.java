@@ -8,10 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.savonikyurii.beatifulkrivbas.R;
-import com.savonikyurii.beatifulkrivbas.databinding.FragmentDetailsBinding;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentDetailsImageBinding;
-import com.savonikyurii.beatifulkrivbas.helpers.Place;
+import com.savonikyurii.beatifulkrivbas.API.Place;
 import com.squareup.picasso.Picasso;
 
 

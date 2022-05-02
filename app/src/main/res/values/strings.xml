@@ -127,4 +127,9 @@
     <string name="ask_pause_route">Ви впевнені що бажаєте призупинити подорож?</string>
     <string name="no_points">Не має цілей для заміни!</string>
     <string name="no_point_for_delete">Не має цілей для видалення!</string>
+    <string name="gps_network_not_enabled">У вас не ввімкнений GPS! Ввімкніть GPS!</string>
+    <string name="open_location_settings">Ввімкнути</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="network">Мобільний інтернет</string>
+    <string name="NetworkError">Відсутнє підключення до мережі інтернет, підключіть інтернет!</string>
 </resources>

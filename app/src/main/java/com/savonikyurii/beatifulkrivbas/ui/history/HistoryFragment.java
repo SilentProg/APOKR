@@ -1,10 +1,7 @@
 package com.savonikyurii.beatifulkrivbas.ui.history;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.telephony.RadioAccessSpecifier;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -22,10 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentHistoryBinding;
-import com.savonikyurii.beatifulkrivbas.helpers.Categories;
-import com.savonikyurii.beatifulkrivbas.helpers.Place;
+import com.savonikyurii.beatifulkrivbas.API.Place;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
-import com.savonikyurii.beatifulkrivbas.ui.list.ListAllAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

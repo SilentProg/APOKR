@@ -1,8 +1,7 @@
 package com.savonikyurii.beatifulkrivbas.helpers;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.savonikyurii.beatifulkrivbas.API.Place;
 
 import java.util.ArrayList;
 import java.util.List;

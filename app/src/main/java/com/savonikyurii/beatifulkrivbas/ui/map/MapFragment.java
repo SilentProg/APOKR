@@ -36,11 +36,10 @@ import com.google.maps.PendingResult;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
-import com.savonikyurii.beatifulkrivbas.MainActivity;
 import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentMapBinding;
 import com.savonikyurii.beatifulkrivbas.helpers.CustomInfoWindowGoogleMap;
-import com.savonikyurii.beatifulkrivbas.helpers.Place;
+import com.savonikyurii.beatifulkrivbas.API.Place;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 
 

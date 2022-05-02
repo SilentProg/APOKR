@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#001B2529</color>
-    <color name="purple_500">#00947E</color>
     <color name="purple_700">#00947E</color>
+    <color name="purple_200_1">#7AA999</color>
+    <color name="purple_700_1">#28263C</color>
     <color name="teal_200">#B2DFDC</color>
     <color name="teal_700">#FF018786</color>
+
     <color name="black">#FF000000</color>
+    <color name="black_1">#3B3B3D</color>
+
+
+    <color name="purple_500">#00947E</color>
     <color name="white">#E0F2F2</color>
     <color name="df_transparent_black_background">#80000000</color>
     <color name="teal_500">#149D9D</color>
