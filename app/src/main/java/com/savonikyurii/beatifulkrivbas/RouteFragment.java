@@ -19,38 +19,37 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentRouteBinding;
-import com.savonikyurii.beatifulkrivbas.API.Place;
-import com.savonikyurii.beatifulkrivbas.helpers.Route;
+import com.savonikyurii.beatifulkrivbas.GeolocationAPI.Place;
+import com.savonikyurii.beatifulkrivbas.GeolocationAPI.Route;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 import com.savonikyurii.beatifulkrivbas.ui.list.ListAllAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
-
+//клас контролер головного вікна мандрівки
 public class RouteFragment extends Fragment {
+    //оголошення змінних
     private FragmentRouteBinding binding;
     private DatabaseReference mRefData;
     private FirebaseAuth mAuth;
     private ListAllAdapter adapter;
 
 
-    @Override
+    @Override//створення вікна
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentRouteBinding.inflate(inflater, container, false);
-
+        //виклик ініціалізації
         init();
-
-
-
         return binding.getRoot();
     }
-
+    //метод ініціалізації
     private void init() {
+        //ініціалізація змінних
         mRefData = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-
+        //ініціалізація мандрівки
         initRoute();
-
+        //встановлення обробника натискання на кнопку
         binding.imageRouteCurrent.setOnClickListener(view -> {
             DetailsFragment.place = Route.getCurrentDestination();
             try {
@@ -58,15 +57,11 @@ public class RouteFragment extends Fragment {
             }catch (Exception e){
                 NavHostFragment.findNavController(this).navigate(R.id.nav_details_route);
             }
-
         });
-
-
-
     }
-
-
+    //ініціалізація мандрівки
     private void initRoute(){
+        //зчитування та вивід поточної цілі
         mRefData.child("userdata").child(Objects.requireNonNull(mAuth.getUid())).child("route").child("currentDestination").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -101,18 +96,18 @@ public class RouteFragment extends Fragment {
 
             }
         });
-
+        //створення адаптера та його встановлення
         adapter = new ListAllAdapter(getActivity(), Route.getRoute(),this);
         binding.routelist.setAdapter(adapter);
         binding.routelist.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged") // оновлення списку
     private void updateUi(){
         adapter.notifyDataSetChanged();
     }
 
-
+    //ініціалізація поточної цілі
     private void initCurrentDestination(Place newCurrentDestination){
         mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").child(Route.getCurrentDestination().getTitle()).removeValue();
         mRefData.child("userdata").child(mAuth.getUid()).child("route").child("currentDestination").child(newCurrentDestination.getTitle()).setValue(newCurrentDestination);

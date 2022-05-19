@@ -1,19 +1,21 @@
-package com.savonikyurii.beatifulkrivbas.API;
-
-public abstract class GeoPosition {
+package com.savonikyurii.beatifulkrivbas.GeolocationAPI.AbstractClasses;
+import java.io.Serializable;
+/*Фундаментальний клас GeoPosition*/
+/*Призначений для зберігання базової інформації про місце*/
+public abstract class GeoPosition implements Serializable {
+    /*Поля класу*/
     private String title;
     private double latitude;
     private double longtude;
-
+    /*Конструктори*/
     public GeoPosition() {
     }
-
     public GeoPosition(String title, double latitude, double longtude) {
         this.title = title;
         this.latitude = latitude;
         this.longtude = longtude;
     }
-
+    /*Методи встановлення та отримання полів класу*/
     public String getTitle() {
         return title;
     }
@@ -37,7 +39,7 @@ public abstract class GeoPosition {
     public void setLongtude(double longtude) {
         this.longtude = longtude;
     }
-
+    /*Метод який дозволяє перетворити об'єкт класу в його рядковий аналог*/
     @Override
     public String toString() {
         return "GeoPosition{" +

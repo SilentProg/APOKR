@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="105dp"
     android:layout_height="wrap_content"
-    android:background="@drawable/bottomsheetbackground"
+    android:background="?attr/background_infowindow"
     android:padding="5dp"
     >
 

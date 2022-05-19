@@ -132,4 +132,11 @@
     <string name="wifi">Wi-Fi</string>
     <string name="network">Мобільний інтернет</string>
     <string name="NetworkError">Відсутнє підключення до мережі інтернет, підключіть інтернет!</string>
+    <string name="support">Підтримка</string>
+    <string name="aboutApp">Про додаток</string>
+    <string name="feedback">Зворотній зв\'зок</string>
+    <string name="aboutDevelored">Про розробника</string>
+    <string name="github"><u>https://github.com/SilentProg</u></string>
+    <string name="textFeedback">Зворотній зв\'язок</string>
+    <string name="send">Надіслати</string>
 </resources>

@@ -22,6 +22,20 @@
                 android:title="@string/history" />
         </menu>
     </item>
+    <item android:title="@string/support">
+        <menu>
+            <item
+                android:id="@+id/btnAboutApp"
+                android:title="@string/aboutApp"
+                android:icon="@drawable/about"
+                />
+            <item
+                android:id="@+id/btnFeedback"
+                android:title="@string/feedback"
+                android:icon="@drawable/feedback"
+                />
+        </menu>
+    </item>
     <item android:title="@string/logout_from_acaunt">
         <menu>
             <item

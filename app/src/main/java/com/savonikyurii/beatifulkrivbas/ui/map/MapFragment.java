@@ -39,16 +39,15 @@ import com.google.maps.model.DirectionsRoute;
 import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentMapBinding;
 import com.savonikyurii.beatifulkrivbas.helpers.CustomInfoWindowGoogleMap;
-import com.savonikyurii.beatifulkrivbas.API.Place;
+import com.savonikyurii.beatifulkrivbas.GeolocationAPI.Place;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 
 
 import java.util.ArrayList;
 import java.util.List;
-
+//клас контролер мапи
 public class MapFragment extends Fragment implements OnMapReadyCallback{
-
-
+    //оголошення полів
     private static final String TAG = "Map";
     private GoogleMap mMap;
     private FragmentMapBinding binding;
@@ -57,37 +56,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     public static Place place;
     private Polyline currentPolyline;
     private GeoApiContext mGeoApiContext = null;
-
+    //створення вью
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMapBinding.inflate(inflater, container, false);
-
+        //виклик ініціалізація
         init();
         initMarkers();
-
+        //поверення вью
         return binding.getRoot();
     }
 
 
-    @Override
+    @Override //метод, який відбувається при створення мапи
     public void onMapReady(GoogleMap googleMap) {
+        //ініціалізовуємо зміну мапи
         mMap = googleMap;
-
+        //якщо місце не нул то переводимо камеру на нього
         if (place!=null){
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLatitude(),place.getLongtude()), 15));
         }else{
+            //інакше на центр міста
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(47.91032835703162, 33.39146400501618), 10));
         }
+        //створення адаптера інформаційного вікна мапи та його встановлення
         CustomInfoWindowGoogleMap infoWindowGoogleMap = new CustomInfoWindowGoogleMap(getActivity());
         mMap.setInfoWindowAdapter(infoWindowGoogleMap);
-
+        //перевіряємо дозволи на відстеження геоданних
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             mMap.setMyLocationEnabled(true);
         }
-        //new FetchURL(getActivity()).execute(getUrl(new LatLng(48.014027997319744, 33.484797886699965), new LatLng(47.89591530085526, 33.33274639636037), "driving"), "driving");
-       // new FetchURL(getActivity()).execute(getUrl(new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude()), new LatLng(47.89591530085526, 33.33274639636037), "driving"), "driving");
-
-        //calculateDirections(new LatLng(47.999628693296565, 33.44792163717202),new LatLng(47.89591530085526, 33.33274639636037));
-
+        //натискання на інформаційне вікно
         mMap.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
             @Override
             public void onInfoWindowLongClick(@NonNull Marker marker) {
@@ -98,26 +96,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             }
         });
     }
-
-
+    //метод ініціалізації
     private void init(){
+        //знаходимо мапу
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-
+        //отримуємо посилання на джерело даних
         mRefData = FirebaseDatabase.getInstance().getReference();
-
+        //отримуємо мапу
         mapFragment.getMapAsync(this);
-
+        //ініціалізація гео контексту
         if(mGeoApiContext == null){
             mGeoApiContext = new GeoApiContext.Builder()
                     .apiKey("AIzaSyBR5UdpoDsXIU_jax39-Yo43qKVQ_XttHU")
                     .build();
         }
     }
-
+    //метод заповення мапи маркерами
     private void initMarkers(){
        allMarkers = new ArrayList<>();
+       //зчитуємо дані з джерела
         mRefData.child("places").addValueEventListener(new ValueEventListener() {
-            @Override
+            @Override //додаємо маркери до списку
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (allMarkers.size()>0) allMarkers.clear();
                 for (DataSnapshot ds: snapshot.getChildren()){
@@ -129,82 +128,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                     }
                 }
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
-
-    private void calculateDirections(LatLng start, LatLng end){
-        Log.d(TAG, "calculateDirections: calculating directions.");
-
-        com.google.maps.model.LatLng destination = new com.google.maps.model.LatLng(
-                end.latitude,
-                end.longitude
-        );
-        DirectionsApiRequest directions = new DirectionsApiRequest(mGeoApiContext);
-
-        directions.alternatives(false);
-        directions.origin(
-                new com.google.maps.model.LatLng(
-                        start.latitude,
-                        start.longitude
-                )
-        );
-        Log.d(TAG, "calculateDirections: destination: " + destination.toString());
-        directions.destination(destination).setCallback(new PendingResult.Callback<DirectionsResult>() {
-            @Override
-            public void onResult(DirectionsResult result) {
-                Log.d(TAG, "calculateDirections: routes: " + result.routes[0].toString());
-                Log.d(TAG, "calculateDirections: duration: " + result.routes[0].legs[0].duration);
-                Log.d(TAG, "calculateDirections: distance: " + result.routes[0].legs[0].distance);
-                Log.d(TAG, "calculateDirections: geocodedWayPoints: " + result.geocodedWaypoints[0].toString());
-                addPolylinesToMap(result);
-            }
-
-            @Override
-            public void onFailure(Throwable e) {
-                Log.e(TAG, "calculateDirections: Failed to get directions: " + e.getMessage() );
-
-            }
-        });
-    }
-
-    private void addPolylinesToMap(final DirectionsResult result){
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "run: result routes: " + result.routes.length);
-
-                for(DirectionsRoute route: result.routes){
-                    Log.d(TAG, "run: leg: " + route.legs[0].toString());
-                    List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
-
-                    List<LatLng> newDecodedPath = new ArrayList<>();
-
-                    // This loops through all the LatLng coordinates of ONE polyline.
-                    for(com.google.maps.model.LatLng latLng: decodedPath){
-
-//                        Log.d(TAG, "run: latlng: " + latLng.toString());
-
-                        newDecodedPath.add(new LatLng(
-                                latLng.lat,
-                                latLng.lng
-                        ));
-                    }
-                    Polyline polyline = mMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
-                    polyline.setColor(ContextCompat.getColor(getActivity(), R.color.darkgray));
-                    polyline.setClickable(true);
-
-                }
-            }
-        });
-    }
-
+    //оновлюємо інтерфейс
     private void updateUI(List<Place> list){
         mMap.clear();
+        //додаємо маркери на карту
         for (Place place: list) {
             LatLng temp = new LatLng(place.getLatitude(), place.getLongtude());
             MarkerOptions marker = new MarkerOptions().position(temp);
@@ -212,10 +143,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
             m.setTag(place);
         }
     }
-
+    //при натисканні на інформаційне вікна маркера
     private void InfoWindowClick(Place place){
         Log.d("place", place.toString());
         DetailsFragment.place = place;
+        //відкриваємо деталі уього місця
         NavHostFragment.findNavController(this).navigate(R.id.nav_details);
     }
 }

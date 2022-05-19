@@ -1,10 +1,11 @@
-package com.savonikyurii.beatifulkrivbas.helpers;
+package com.savonikyurii.beatifulkrivbas.GeolocationAPI.AdditionalClasses;
 
-import android.content.res.Resources;
+import java.io.Serializable;
 
-import com.savonikyurii.beatifulkrivbas.R;
-
-public class Categories {
+/*Додатковий клас Categories*/
+/*Призначений для зберігання категорій місць*/
+public class Categories implements Serializable {
+    /*Поля класу*/
     public static final String MilitaryPatriotic = "Військові";
     public static final String CulturalObjects = "Культурні";
     public static final String ReligiousObjects = "Релігіозні";

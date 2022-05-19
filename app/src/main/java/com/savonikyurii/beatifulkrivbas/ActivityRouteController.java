@@ -14,19 +14,20 @@ import android.os.Bundle;
 
 import com.savonikyurii.beatifulkrivbas.databinding.ActivityRouteControllerBinding;
 import com.savonikyurii.beatifulkrivbas.ui.BottomSheetRoute;
-
+//клас контроллер вікна мандрівки
 public class ActivityRouteController extends AppCompatActivity implements BottomSheetRoute.BottomSheetRouteListener {
+    //оголошення полів
     private ActivityRouteControllerBinding binding;
     private AppBarConfiguration mAppBarConfiguration;
     public static DrawerLayout drawer;
 
 
-    @Override
+    @Override // створення вікна
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityRouteControllerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        //ініціалізація змінних
         setSupportActionBar(binding.toolbarRouteController);
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_route_controller, R.id.nav_details_route)
@@ -38,10 +39,12 @@ public class ActivityRouteController extends AppCompatActivity implements Bottom
         NavigationUI.setupWithNavController(binding.toolbarRouteController, navController);
     }
 
-    @Override
+    @Override // перенавантаження кнопки назад
     public void onBackPressed() {
+        //якщо відкрите меню закриваємо його
         if (drawer.isDrawerOpen(GravityCompat.END)) drawer.closeDrawer(GravityCompat.END);
         else{
+            //інакше якщо поточне вікно це контролер мандрівки то запитуємо чи бажаєте ви завершити мандрівку
             if (Navigation.findNavController(this, R.id.nav_host_fragment_route).getCurrentDestination().getId() == R.id.nav_route_controller){
 
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -62,12 +65,13 @@ public class ActivityRouteController extends AppCompatActivity implements Bottom
                 dialog.show();
 
             }else{
+                //інакше виконуємо super.onBackPressed();
                 super.onBackPressed();
             }
         }
     }
 
-    @Override
+    @Override // перенавантажуємо методи татискання на кнопи BottomSheetDialog
     public void onButtonClicked(int id) {
         switch (id){
             case R.id.btnBottomSheetStart:

@@ -17,23 +17,23 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
+//клас контроллер вікна заставки
 public class SplashActivity extends AppCompatActivity {
-
+    //оголошення змінних
     private DatabaseReference mRefData;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
 
 
-    @Override
+    @Override//створення вікна
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        //ініціалізація змінних
         mRefData = FirebaseDatabase.getInstance().getReference();
-
-        if (isOnline(this)){
-            new Handler().postDelayed(new Runnable() {
+        //перевіряємо чи є підключення до мережі інтернет
+        if (isOnline(this)){ // якщо так
+            new Handler().postDelayed(new Runnable() { //відкриважємо вікно входу
                 @Override
                 public void run() {
                     startActivity(new Intent(SplashActivity.this, ActivityLogin.class));
@@ -41,16 +41,8 @@ public class SplashActivity extends AppCompatActivity {
                 }
             },1000);
         }
-
-
-        //FirebaseAuth.getInstance().signOut();
-
-        //.child("userdata").child(FirebaseAuth.getInstance().getUid()).child("visited").child("other").child("Test").removeValue();
-        //mRefData.child("userdata").child(FirebaseAuth.getInstance().getUid()).child("visited").child("last").child("test").setValue(new Place("test", "test", "https://ichef.bbci.co.uk/news/640/cpsprodpb/15B7B/production/_106555988_kryviy_rig_landscape.jpg","test", 5 , "test", 5.0,5.0));
-        //mRefData.child("userdata").child(FirebaseAuth.getInstance().getUid()).child("route").child("currentDestination").child("test").setValue(new Place("test", "test", "https://ichef.bbci.co.uk/news/640/cpsprodpb/15B7B/production/_106555988_kryviy_rig_landscape.jpg","test", 5 , "test", 5.0,5.0));
-        //mRefData.child("userdata").child(FirebaseAuth.getInstance().getUid()).child("visited").child("other").child("test").setValue(new Place("test", "test", "https://ichef.bbci.co.uk/news/640/cpsprodpb/15B7B/production/_106555988_kryviy_rig_landscape.jpg","test", 5 , "test", 5.0,5.0));
     }
-
+    //метод перевірки підключення до інтернету, якщо ні пропонуємо під'єднатися
     public boolean isOnline(Context context)
     {
         ConnectivityManager cm =

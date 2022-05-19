@@ -1,9 +1,6 @@
 package com.savonikyurii.beatifulkrivbas.ui.catalog;
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -14,24 +11,27 @@ import android.view.ViewGroup;
 
 import com.savonikyurii.beatifulkrivbas.R;
 import com.savonikyurii.beatifulkrivbas.databinding.FragmentCatalogBinding;
-import com.savonikyurii.beatifulkrivbas.helpers.Categories;
+import com.savonikyurii.beatifulkrivbas.GeolocationAPI.AdditionalClasses.Categories;
 import com.savonikyurii.beatifulkrivbas.ui.list.ListFragment;
 
-
+//клас контролер каталогу
 public class CatalogFragment extends Fragment {
+    //оголошення полів
     private FragmentCatalogBinding binding;
 
-    @Override
+    @Override //метод створення
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //створення binding змінної
         binding = FragmentCatalogBinding.inflate(inflater, container, false);
-
+        //виклик методу ініціалізації
         init();
-
+        //повертаємо інтерфейс
         return binding.getRoot();
     }
-
+    //метод інітіалізації
     private void init(){
+        //встановлення обробників натискання на категорії
         binding.all.setOnClickListener(this::onClickAllPlaces);
         binding.cardMilitaryPatriotic.setOnClickListener(this::onMilitaryPatrioticClick);
         binding.cardCulturalObjects.setOnClickListener(this::onCulturalClick);
@@ -42,9 +42,10 @@ public class CatalogFragment extends Fragment {
         binding.cardUrbanObjects.setOnClickListener(this::onUrbanClick);
         binding.cardOther.setOnClickListener(this::onOtherClick);
     }
-
+    /*методи натискання на категорії*/
     private void onClickAllPlaces(View view){
         ListFragment.category = Categories.AllObjects;
+        //переходимо на вікно зі списком
         try {
             NavHostFragment.findNavController(this).navigate(R.id.nav_list);
         }catch (Exception e){

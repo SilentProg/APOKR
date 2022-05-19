@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -27,9 +28,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.savonikyurii.beatifulkrivbas.helpers.Categories;
-import com.savonikyurii.beatifulkrivbas.API.Place;
-import com.savonikyurii.beatifulkrivbas.API.User;
+import com.savonikyurii.beatifulkrivbas.GeolocationAPI.Place;
+import com.savonikyurii.beatifulkrivbas.GeolocationAPI.User;
 import com.savonikyurii.beatifulkrivbas.ui.BottomSheetRoute;
 
 import androidx.annotation.NonNull;
@@ -47,10 +47,9 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+//клас контролер головного вікна
 public class MainActivity extends AppCompatActivity implements BottomSheetRoute.BottomSheetRouteListener{
-
-
+    //оголошення змінних
     private AppBarConfiguration mAppBarConfiguration;
     private static long back_pressed;
     private Button btnLogout;
@@ -66,15 +65,15 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
     private User userdata;
     private final int CODE_LOCATION = 45;
 
-    @Override
+    @Override//створення вікна
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        //UpdateCounter();
         setSupportActionBar(toolbar);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+        //ініціалізація змінних
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_catalog, R.id.nav_history, R.id.nav_map)
                 .setDrawerLayout(drawer)
@@ -84,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
         NavigationUI.setupWithNavController(navigationView, navController);
 
         NavigationView nv = findViewById(R.id.nav_view);
+        //встановлення обробників при натискання на пункт меню
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -92,16 +92,19 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
                     case R.id.nav_home: Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.nav_home); drawer.closeDrawer(GravityCompat.START); break;
                     case R.id.nav_history: Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.nav_history); drawer.closeDrawer(GravityCompat.START); break;
                     case R.id.nav_map: Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.nav_map); drawer.closeDrawer(GravityCompat.START); break;
-                    case R.id.btnLogout: showBeautifulDialog(getString(R.string.exit),getString(R.string.logout_message)); break;
+                    case R.id.btnLogout: showLogoutDialog(getString(R.string.exit),getString(R.string.logout_message)); break;
+                    case R.id.btnAboutApp: Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.nav_about_app); drawer.closeDrawer(GravityCompat.START); break;
+                    case R.id.btnFeedback: Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.nav_feedback); drawer.closeDrawer(GravityCompat.START); break;
                 }
                 return true;
             }
         });
     }
 
-    @Override
+    @Override//стар вікна
     protected void onStart() {
         super.onStart();
+        //перевіряємо дозволи
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -115,27 +118,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
 
     }
 
-    public void UpdateCounter(){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        ref.child("userdata").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("visited").child("other").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Place> places = new ArrayList<>();
-                for (DataSnapshot ds: snapshot.getChildren()) {
-                    places.add(ds.getValue(Place.class));
-                }
-                int count = places.size()+1;
-                ref.child("userdata").child(Objects.requireNonNull(FirebaseAuth.getInstance().getUid())).child("userInfo").child("count").setValue(count);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    @Override
+    @Override//отримання результату перевірки дозволів
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CODE_LOCATION){
@@ -144,8 +127,9 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
             }
         }
     }
-
+    //метод ініціалізації
     private void init(){
+        //ініціалізація змінних
         btnLogout = (Button) findViewById(R.id.btnLogout);
         toolbar = findViewById(R.id.toolbar);
         drawer = findViewById(R.id.drawer_layout);
@@ -158,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
         user = mAuth.getCurrentUser();
 
         mRefData = FirebaseDatabase.getInstance().getReference();
-
+        //отримання даних поточного користувача та вивід їх на екран з джерела даних
         mRefData.child("userdata").child(user.getUid()).child("userInfo").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -176,8 +160,8 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
             }
         });
     }
-
-    private void showBeautifulDialog(String title, String description){
+    //метод показу діалога визоду з акаунта
+    private void showLogoutDialog(String title, String description){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);  // заголовок
         builder.setMessage(description); // сообщение
@@ -198,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
         AlertDialog lg_dialog = builder.create();
         lg_dialog.show();
     }
-
+    //метод виходу з акаунта
     private void Logout() {
         FirebaseAuth.getInstance().signOut(); //Отримання екземплеру адміністратору
         //створення новох активності
@@ -207,21 +191,24 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
         finish();
     }
 
-    @Override
+    @Override//перенавантаження метода натиснення на кнопку до попереднього вікна
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 
-    @Override
+    @Override//перенавантаження метода натискання на кнопку назад
     public void onBackPressed() {
         if(
-                Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_list ||
-                Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_imagedetails ||
-                Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_details ||
-                Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_catalog ||
-                Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_map
+            Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_list ||
+            Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_imagedetails ||
+            Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_details ||
+            Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_catalog ||
+            Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_about_app ||
+            Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_feedback ||
+            Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_map ||
+            Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.nav_route
         ){
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -244,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
         }
     }
 
-    @Override
+    @Override //перенавантажуємо методи BottomSheetDialog
     public void onButtonClicked(int id) {
         switch (id){
             case R.id.btnBottomSheetStart:
@@ -263,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
                 throw new IllegalStateException("Unexpected value: " + id);
         }
     }
-
+    //метод перевірки на ввімкнений gps, якщо ні пропонуємо ввімкнути
     private boolean GPSChecker(){
         boolean result = false;
         LocationManager lm = (LocationManager)getBaseContext().getSystemService(Context.LOCATION_SERVICE);
@@ -292,13 +279,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetRoute.
                     //get gps
                 }
             });
-            dialog.setNegativeButton(getBaseContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                    // TODO Auto-generated method stub
-
-                }
+            dialog.setNegativeButton(getBaseContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {@Override public void onClick(DialogInterface paramDialogInterface, int paramInt) { }
             });
             AlertDialog d = dialog.create();
             d.show();

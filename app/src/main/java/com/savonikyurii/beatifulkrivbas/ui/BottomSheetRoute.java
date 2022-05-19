@@ -12,35 +12,35 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.savonikyurii.beatifulkrivbas.R;
-import com.savonikyurii.beatifulkrivbas.API.Place;
-
+import com.savonikyurii.beatifulkrivbas.GeolocationAPI.Place;
+//клас контроллер BottomSheet діалогу успадковує BottomSheetDialogFragment
 public class BottomSheetRoute extends BottomSheetDialogFragment {
+    //оголошення змінних
     private BottomSheetRouteListener mListener;
     private Button btnReturn;
     private Button btnStart;
     private Button btnWholeRoute;
     private Place place;
-
+    //конструктор
     public BottomSheetRoute(Place p){
         this.place = p;
     }
 
-    @Override
+    @Override//створення інтерфейсу діалога
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.bottomsheet_route, container, false);
-
+        //виклик ініціалізації
         init(view);
-
-
+        //повернення інтерфейсу
         return view;
     }
-
+    //метод ініціалізації
     private void init(View view){
+        //знаходимо елементи інтерфейсу
         btnReturn = (Button) view.findViewById(R.id.btnBottomSheetReturnToList);
         btnStart = (Button) view.findViewById(R.id.btnBottomSheetStart);
         btnWholeRoute = (Button) view.findViewById(R.id.btnBottomSheetWholeRoute);
-
+        //встановлення обробників натискання на кнопку
         btnReturn.setOnClickListener(view1 -> {
             mListener.onButtonClicked(btnReturn.getId());
             dismiss();
@@ -54,12 +54,12 @@ public class BottomSheetRoute extends BottomSheetDialogFragment {
             dismiss();
         });
     }
-
+    //ствронення інтерфейсу
     public interface BottomSheetRouteListener{
         void onButtonClicked(int id);
     }
 
-    @Override
+    @Override //метод який відбувається при виклику класу
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {

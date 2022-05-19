@@ -14,17 +14,18 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.savonikyurii.beatifulkrivbas.R;
-import com.savonikyurii.beatifulkrivbas.API.Place;
+import com.savonikyurii.beatifulkrivbas.GeolocationAPI.Place;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
+//класс адаптер для списку місць
 public class ListAllAdapter extends RecyclerView.Adapter<ListAllAdapter.ListAllViewHolder> {
+    //оголошення змінних
     private List<Place> list;
     private Context context;
     private Fragment fragment;
-
+    //конструктори
     public ListAllAdapter(Context ct, List<Place> list_of_place, ListFragment fragment){
         this.context = ct;
         this.list = list_of_place;
@@ -45,13 +46,13 @@ public class ListAllAdapter extends RecyclerView.Adapter<ListAllAdapter.ListAllV
     @NonNull
     @Override
     public ListAllViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
+        //створення вью для елемента списка
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.list_all_item, parent, false);
         return new ListAllViewHolder(view);
     }
 
-    @Override
+    @Override //заповнення елемента списка даними
     public void onBindViewHolder(@NonNull ListAllViewHolder holder, int position) {
         holder.title.setText(list.get(position).getTitle());
         holder.category.setText(list.get(position).getCategory());
@@ -70,11 +71,11 @@ public class ListAllAdapter extends RecyclerView.Adapter<ListAllAdapter.ListAllV
         });
     }
 
-    @Override
+    @Override // повернення кількості місць
     public int getItemCount() {
         return list.size();
     }
-
+    //знаходження елементів інтерфейсу
     public class ListAllViewHolder extends RecyclerView.ViewHolder {
         private ImageView image;
         private TextView title, category;

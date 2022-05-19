@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,13 +22,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.savonikyurii.beatifulkrivbas.R;
-import com.savonikyurii.beatifulkrivbas.helpers.Categories;
-import com.savonikyurii.beatifulkrivbas.API.Place;
+import com.savonikyurii.beatifulkrivbas.GeolocationAPI.AdditionalClasses.Categories;
+import com.savonikyurii.beatifulkrivbas.GeolocationAPI.Place;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListFragment extends Fragment {
+    //оголошення полів класу
     public static Place place;
     private RecyclerView list;
     private List<Place> all_places;
@@ -37,34 +39,40 @@ public class ListFragment extends Fragment {
     private Button btnReturnToCatalog;
     public static String category = Categories.AllObjects;
 
-    @Override
+    @Override //методж створення вікна
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_list, container, false);
+        //викликаємо ініціалізацію
         init(root);
-
+        //викликаємо зчитування даних
         ReadData(category);
-
+        //повертаємо створений View
         return root;
     }
 
-
+    //метод ініциалізації
     private void init(View root){
+        //ініціалізуємо змінні
         list = root.findViewById(R.id.list);
         btnReturnToCatalog = (Button)root.findViewById(R.id.btnReturnToCatalog);
         all_places = new ArrayList<>();
         cardEmpty = root.findViewById(R.id.card_list_empty);
+        //отримання посилання на джерело даних
         mRefData = FirebaseDatabase.getInstance().getReference();
+        //створення адаптера для списку
         adapter = new ListAllAdapter(getActivity(), all_places, this);
+        //встановлення адаптера
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        //встановлення слухача натискання на кнопку: повернутися до каталогу
         btnReturnToCatalog.setOnClickListener(view -> {
             NavHostFragment.findNavController(this).navigateUp();
         });
-        //all_places.add(new Place("Гданцевский парк", "Центрально-Міський район, Кривий Ріг, 50000", "https://99px.ru/sstorage/53/2015/11/tmb_150152_4865.jpg", Categories.CULTURAL_HERITAGE, "none", "none", 47.89788844983029, 33.33293223353166));
     }
 
+    //метод перевірки яку саме категорію місць потрібно зчитати з джерела даних
     private void ReadData(String category){
+        //відповідно до потрібної категорії зчитуємо потрібні дані
         if (category.equals(Categories.AllObjects)) {
             ReadAll();
         }else if (category.equals(Categories.MilitaryPatriotic)){
@@ -84,57 +92,59 @@ public class ListFragment extends Fragment {
         }else{
             ReadAllCategory(Categories.OtherObjects);
         }
-
-
     }
-
+    //метод зчитування даних з джерела
     private void ReadAllCategory(String category){
+        //звертаємося до джерела даних
         mRefData.child("places").child(category).addValueEventListener(new ValueEventListener() {
-            @Override
+            @Override //при отриманні даних
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //очищаємо список місць, щоб уникнути дублювання
                 if (all_places.size() > 0) all_places.clear();
+                //якщо дані які ми отримали з джерела пусті, то повідомляємо про це користувача
                 if (!snapshot.hasChildren()) cardEmpty.setVisibility(View.VISIBLE);
+                //проходимося по всім даним що отримали
                 for (DataSnapshot ds : snapshot.getChildren()) {
+                    //конвертуємо отримані дані в потрібний нам формат
                     Place place = ds.getValue(Place.class);
-                    assert place != null;
-                    all_places.add(place);
-                    updateUI();
+                    assert place != null;//перевіряємо чи зміння місця не пуста
+                    all_places.add(place);//додаємо місце в список
+                    updateUI();//оновлюємо інтерфейс
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            @Override //при помилці отриманні даних виводимо помилку
+            public void onCancelled(@NonNull DatabaseError error) { Toast.makeText(getActivity(), "Помилка отримання даних", Toast.LENGTH_SHORT).show(); }
         });
-
     }
-
+    //метод зчитування даних з джерела
     private void ReadAll(){
+        //звертаємося до джерела даних
         mRefData.child("places").addValueEventListener(new ValueEventListener() {
-            @Override
+            @Override //при отриманні даних
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //очищаємо список місць, щоб уникнути дублювання
                 if (all_places.size() > 0) all_places.clear();
+                //якщо дані які ми отримали з джерела пусті, то повідомляємо про це користувача
                 if (!snapshot.hasChildren()) cardEmpty.setVisibility(View.VISIBLE);
+                //проходимося по всім даним що отримали
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     for (DataSnapshot data : ds.getChildren()) {
+                        //конвертуємо отримані дані в потрібний нам формат
                         Place place = data.getValue(Place.class);
-                        assert place != null;
-                        all_places.add(place);
-                        updateUI();
+                        assert place != null; //перевіряємо чи зміння місця не пуста
+                        all_places.add(place);//додаємо місце в список
+                        updateUI();//оновлюємо інтерфейс
                     }
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            @Override //при помилці отриманні даних виводимо помилку
+            public void onCancelled(@NonNull DatabaseError error) { Toast.makeText(getActivity(), "Помилка отримання даних", Toast.LENGTH_SHORT).show(); }
         });
     }
-
+    //метод оновлення інтерфейсу
     @SuppressLint("NotifyDataSetChanged")
     private void updateUI() {
+        //оновлюємо список
         adapter.notifyDataSetChanged();
     }
 

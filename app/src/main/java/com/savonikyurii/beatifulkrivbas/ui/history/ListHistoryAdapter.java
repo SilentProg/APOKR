@@ -23,18 +23,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.savonikyurii.beatifulkrivbas.R;
-import com.savonikyurii.beatifulkrivbas.API.Place;
+import com.savonikyurii.beatifulkrivbas.GeolocationAPI.Place;
 import com.savonikyurii.beatifulkrivbas.ui.details.DetailsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-
+//класс адаптер для списку історії
 public class ListHistoryAdapter extends RecyclerView.Adapter<ListHistoryAdapter.ListHistoryViewHolder>{
+    //оголошення змінних
     private List<Place> list;
     private Context context;
     private Fragment fragment;
     private final int MENU_DELETE = 1;
-
+    //конструктори
     public ListHistoryAdapter(Context ct, List<Place> list_of_place, HistoryFragment fragment){
         this.context = ct;
         this.list = list_of_place;
@@ -55,13 +56,13 @@ public class ListHistoryAdapter extends RecyclerView.Adapter<ListHistoryAdapter.
     @NonNull
     @Override
     public ListHistoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
+        //створення вью для елемента списка
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.list_history_item, parent, false);
         return new ListHistoryViewHolder(view);
     }
 
-    @Override
+    @Override //заповнення елемента списка даними
     public void onBindViewHolder(@NonNull ListHistoryViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.title.setText(list.get(position).getTitle());
         holder.category.setText(list.get(position).getCategory());
@@ -84,7 +85,7 @@ public class ListHistoryAdapter extends RecyclerView.Adapter<ListHistoryAdapter.
             }
         });
     }
-
+    //метод створення діалогового вікна видалення місця з історії
     private AlertDialog.Builder builder(Context c, int p){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.delete_history);  // заголовок
@@ -115,12 +116,12 @@ public class ListHistoryAdapter extends RecyclerView.Adapter<ListHistoryAdapter.
         return builder;
     }
 
-    @Override
+    @Override // метод повернення кількості елементів в списку
     public int getItemCount() {
         return list.size();
     }
 
-
+    //знаходження елементів інтерфейсу
     public class ListHistoryViewHolder extends RecyclerView.ViewHolder {
         private ImageView image;
         private TextView title, category;

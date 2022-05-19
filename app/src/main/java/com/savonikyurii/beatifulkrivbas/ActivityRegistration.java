@@ -20,10 +20,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.savonikyurii.beatifulkrivbas.API.User;
-
+import com.savonikyurii.beatifulkrivbas.GeolocationAPI.User;
+//клас контролер вікна реєстрації
 public class ActivityRegistration extends AppCompatActivity {
-
+    //оголоешення змінних
     private Button btnReg;
     private DatabaseReference mRefData;
     private FirebaseAuth mAuth;
@@ -32,37 +32,38 @@ public class ActivityRegistration extends AppCompatActivity {
     private TextView editLogin, editPassword, editConfirm_password, editEmail;
     private String login, email, password, confirm_password;
 
-    @Override
+    @Override//метод створення вікна
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        //виклик ініціалізації
         init();
-
+        //встановлення обробників натискання на кнопку назад
         Button btnBack = (Button)findViewById(R.id.btnBack);
         btnBack.setOnClickListener(view -> {
+            //при натисканні переходимо назад
             super.onBackPressed();
         });
     }
-
+    //метод ініціалізації
     private void init(){
+        //ініціалізовуємо змінні
         btnReg = (Button) findViewById(R.id.btnSingUP);
         editLogin = (TextView) findViewById(R.id.textreg_login);
         editEmail = (TextView) findViewById(R.id.textreg_email);
         editPassword = (TextView) findViewById(R.id.textreg_pass);
         editConfirm_password = (TextView) findViewById(R.id.textreg_confirmpass);
-
         mAuth = FirebaseAuth.getInstance();
-
         btnReg.setOnClickListener(this::register);
     }
-
+    //метод реєстрації
     private void register(View view){
-
+        //зчитуємо дані
         login = editLogin.getText().toString();
         email = editEmail.getText().toString();
         password = editPassword.getText().toString();
         confirm_password = editConfirm_password.getText().toString();
-
+        //перевіряємо їх на порожність, в разі порожньої змінної виводими помилку
         if(TextUtils.isEmpty(login)){
             editLogin.setError(getString(R.string.not_login));
             return;
@@ -88,7 +89,7 @@ public class ActivityRegistration extends AppCompatActivity {
             editConfirm_password.setError(getString(R.string.password_mismatch));
             return;
         }
-
+        //реєструємо корисьтувача та авторизовуємо його
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -100,20 +101,21 @@ public class ActivityRegistration extends AppCompatActivity {
                             mRefData = FirebaseDatabase.getInstance().getReference();
                             FirebaseUser user = mAuth.getCurrentUser();
                             mRefData.child("userdata").child(user.getUid()).child("userInfo").setValue(userdata);
-                            Snackbar.make(editConfirm_password.getRootView(), "Registration successful!", BaseTransientBottomBar.LENGTH_LONG).show();
+                            Snackbar.make(editConfirm_password.getRootView(), "Реєстрація успішна!", BaseTransientBottomBar.LENGTH_LONG).show();
                             updateUI();
                         } else {
-
-                            Toast.makeText(ActivityRegistration.this, "Authentication failed.",
+                            Toast.makeText(ActivityRegistration.this, "Реєстрація не вдалася.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
-
+    //оновлення інтерфуйсу
     private void updateUI() {
+        //створюємо інтент
         Intent intent = new Intent(ActivityRegistration.this, ActivityLogin.class);
         FirebaseAuth.getInstance().signOut();
+        //переходимо на вікно входу
         startActivity(intent);
         finish();
     }

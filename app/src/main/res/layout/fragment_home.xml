@@ -83,129 +83,126 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_currentroute"
-            app:cardUseCompatPadding="true"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/userinfo_container"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/userinfo_container">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            >
-
-            <TextView
-                android:id="@+id/label_current"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/current_destination"
-                android:textAlignment="center"
-                android:textSize="12pt"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:padding="5dp">
 
-            <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/image_currentplace"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                app:riv_corner_radius="8dp"
-                android:src="@drawable/icon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/label_current" />
+                <TextView
+                    android:id="@+id/label_current"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/current_destination"
+                    android:textAlignment="center"
+                    android:textSize="12pt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/label_currentplacetitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/image_currentplace"
-                app:layout_constraintStart_toStartOf="@id/image_currentplace"
-                app:layout_constraintEnd_toStartOf="@id/place_title_current"
-                android:layout_marginTop="5dp"
-                app:layout_constraintHorizontal_bias="0"
-                android:paddingStart="5dp"
-                android:textSize="9pt"
-                android:text="@string/title"/>
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/image_currentplace"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:src="@drawable/icon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/label_current"
+                    app:riv_corner_radius="8dp" />
 
-            <TextView
-                android:id="@+id/place_title_current"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingStart="5dp"
-                android:text="@string/place_title"
-                android:textSize="9pt"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/label_currentplacetitle"
-                app:layout_constraintTop_toTopOf="@id/label_currentplacetitle" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/label_currentplacetitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="5dp"
+                    android:text="@string/title"
+                    android:textSize="9pt"
+                    app:layout_constraintEnd_toStartOf="@id/place_title_current"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="@id/image_currentplace"
+                    app:layout_constraintTop_toBottomOf="@id/image_currentplace" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/label_currentcategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/place_title_current"
-                app:layout_constraintStart_toStartOf="@id/image_currentplace"
-                app:layout_constraintHorizontal_bias="0"
-                android:paddingStart="5dp"
-                android:textSize="9pt"
-                android:text="@string/category"/>
+                <TextView
+                    android:id="@+id/place_title_current"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:text="@string/place_title"
+                    android:textSize="9pt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/label_currentplacetitle"
+                    app:layout_constraintTop_toTopOf="@id/label_currentplacetitle" />
 
-            <TextView
-                android:id="@+id/place_category_current"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingStart="5dp"
-                android:text="@string/place_category"
-                android:textSize="9pt"
-                app:layout_constraintStart_toEndOf="@id/label_currentcategory"
-                app:layout_constraintTop_toTopOf="@id/label_currentcategory"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/label_currentcategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:text="@string/category"
+                    android:textSize="9pt"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="@id/image_currentplace"
+                    app:layout_constraintTop_toBottomOf="@id/place_title_current" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAllPlaceInCurrentRoute"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/whole_route"
-                android:textSize="12sp"
-                app:layout_constraintTop_toTopOf="@id/btnAboutDestination"
-                app:layout_constraintEnd_toStartOf="@id/btnAboutDestination"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btnOpenRouteController"
-                />
+                <TextView
+                    android:id="@+id/place_category_current"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:text="@string/place_category"
+                    android:textSize="9pt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/label_currentcategory"
+                    app:layout_constraintTop_toTopOf="@id/label_currentcategory" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAboutDestination"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/about_destination"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/place_category_current"
-                app:layout_constraintStart_toEndOf="@id/btnAllPlaceInCurrentRoute"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAllPlaceInCurrentRoute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/whole_route"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/btnAboutDestination"
+                    app:layout_constraintStart_toEndOf="@id/btnOpenRouteController"
+                    app:layout_constraintTop_toTopOf="@id/btnAboutDestination" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnOpenRouteController"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@string/start"
-                app:layout_constraintBottom_toBottomOf="@+id/btnAllPlaceInCurrentRoute"
-                app:layout_constraintEnd_toStartOf="@+id/btnAllPlaceInCurrentRoute"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/btnAllPlaceInCurrentRoute" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAboutDestination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/about_destination"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/btnAllPlaceInCurrentRoute"
+                    app:layout_constraintTop_toBottomOf="@id/place_category_current" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnOpenRouteController"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/start"
+                    app:layout_constraintBottom_toBottomOf="@+id/btnAllPlaceInCurrentRoute"
+                    app:layout_constraintEnd_toStartOf="@+id/btnAllPlaceInCurrentRoute"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/btnAllPlaceInCurrentRoute" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
