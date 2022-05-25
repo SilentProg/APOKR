@@ -38,7 +38,6 @@ public class ActivityRouteController extends AppCompatActivity implements Bottom
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(binding.toolbarRouteController, navController);
     }
-
     @Override // перенавантаження кнопки назад
     public void onBackPressed() {
         //якщо відкрите меню закриваємо його
@@ -46,9 +45,7 @@ public class ActivityRouteController extends AppCompatActivity implements Bottom
         else{
             //інакше якщо поточне вікно це контролер мандрівки то запитуємо чи бажаєте ви завершити мандрівку
             if (Navigation.findNavController(this, R.id.nav_host_fragment_route).getCurrentDestination().getId() == R.id.nav_route_controller){
-
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
                 builder.setTitle(getString(R.string.whole_route))
                         .setMessage(R.string.ask_pause_route)
                         .setIcon(R.drawable.warning)
@@ -60,17 +57,12 @@ public class ActivityRouteController extends AppCompatActivity implements Bottom
                         .setNegativeButton(R.string.NO, (dialog, which) -> {
                             dialog.cancel();
                         });
-
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
             }else{
                 //інакше виконуємо super.onBackPressed();
                 super.onBackPressed();
-            }
-        }
-    }
-
+            }        }    }
     @Override // перенавантажуємо методи татискання на кнопи BottomSheetDialog
     public void onButtonClicked(int id) {
         switch (id){

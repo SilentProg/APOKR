@@ -34,7 +34,6 @@ public class RouteFragment extends Fragment {
     private FirebaseAuth mAuth;
     private ListAllAdapter adapter;
 
-
     @Override//створення вікна
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentRouteBinding.inflate(inflater, container, false);

@@ -1,5 +1,4 @@
 package com.savonikyurii.beatifulkrivbas.GeolocationAPI;
-
 import com.savonikyurii.beatifulkrivbas.GeolocationAPI.AbstractClasses.BasicUser;
 
 import java.io.Serializable;

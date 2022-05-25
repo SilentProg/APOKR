@@ -1,5 +1,4 @@
 package com.savonikyurii.beatifulkrivbas.GeolocationAPI;
-
 import com.google.android.gms.maps.model.Polyline;
 import com.google.maps.model.DirectionsLeg;
 /*Клас PolylineData*/
@@ -17,15 +16,12 @@ public class PolylineData {
     public Polyline getPolyline() {
         return polyline;
     }
-
     public void setPolyline(Polyline polyline) {
         this.polyline = polyline;
     }
-
     public DirectionsLeg getLeg() {
         return leg;
     }
-
     public void setLeg(DirectionsLeg leg) {
         this.leg = leg;
     }

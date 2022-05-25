@@ -101,5 +101,4 @@ public class DetailsFragment extends Fragment{
         });
         bottomSheetRoute = new BottomSheetRoute(place); //відображаємо діалог
         bottomSheetRoute.show(getActivity().getSupportFragmentManager(), "bottomSheet");
-    }
-}
+    }}

@@ -1,5 +1,4 @@
 package com.savonikyurii.beatifulkrivbas;
-
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -21,12 +20,10 @@ import com.savonikyurii.beatifulkrivbas.databinding.FragmentSendMailBinding;
 
 import java.util.Objects;
 import java.util.Random;
-
 //клас контролер вікна зворотнього зв'зку
 public class SendMailFragment extends Fragment {
     //оголошення змінних
     private FragmentSendMailBinding binding;
-
     @Override //створення вікна
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,7 +42,7 @@ public class SendMailFragment extends Fragment {
                 binding.btnSEND.setOnClickListener(v -> {
                     Intent i = new Intent(Intent.ACTION_SEND);
                     i.setType("message/rfc822");
-                    i.putExtra(Intent.EXTRA_EMAIL , new String[]{Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail()});
+                    i.putExtra(Intent.EXTRA_EMAIL , new String[]{"savoniksteam@ukr.net"});
                     i.putExtra(Intent.EXTRA_SUBJECT, "Відгук №"+ finalCount);
                     i.putExtra(Intent.EXTRA_TEXT, binding.mailBody.getText().toString());
                     try {

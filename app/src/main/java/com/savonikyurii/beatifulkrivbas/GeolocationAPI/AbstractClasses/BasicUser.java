@@ -1,7 +1,5 @@
 package com.savonikyurii.beatifulkrivbas.GeolocationAPI.AbstractClasses;
-
 import java.io.Serializable;
-
 /*Фундаментальний клас BasicUser*/
 /*Призначений для зберігання базової інформації про користувача*/
 public abstract class BasicUser implements Serializable {

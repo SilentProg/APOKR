@@ -1,16 +1,12 @@
 package com.savonikyurii.beatifulkrivbas.GeolocationAPI.AdditionalClasses;
-
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.savonikyurii.beatifulkrivbas.GeolocationAPI.AbstractClasses.BasicUser;
 import com.savonikyurii.beatifulkrivbas.GeolocationAPI.AbstractClasses.GeoPosition;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-
 /*Клас серіалізації даних SerializableController*/
 public class SerializableController {
     /*Поля класу*/

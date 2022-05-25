@@ -1,7 +1,5 @@
 package com.savonikyurii.beatifulkrivbas.GeolocationAPI.AdditionalClasses;
-
 import java.io.Serializable;
-
 /*Додатковий клас Categories*/
 /*Призначений для зберігання категорій місць*/
 public class Categories implements Serializable {

@@ -20,12 +20,9 @@ public class MyLocListener implements LocationListener {
     }
     /*Не використані методи інтерфейса LocationListener*/
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
     @Override
-    public void onProviderEnabled(@NonNull String provider) {
-    }
+    public void onProviderEnabled(@NonNull String provider) {}
     @Override
-    public void onProviderDisabled(@NonNull String provider) {
-    }
+    public void onProviderDisabled(@NonNull String provider) {}
 }

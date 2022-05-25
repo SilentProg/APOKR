@@ -52,7 +52,6 @@ public class CatalogFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
         }
     }
-
     private void onMilitaryPatrioticClick(View view){
         ListFragment.category = Categories.MilitaryPatriotic;
         try {
@@ -61,7 +60,6 @@ public class CatalogFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
         }
     }
-
     private void onCulturalClick(View view){
         ListFragment.category = Categories.CulturalObjects;
         try {
@@ -70,7 +68,6 @@ public class CatalogFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
         }
     }
-
     private void onReligiousClick(View view){
         ListFragment.category = Categories.ReligiousObjects;
         try {
@@ -95,7 +92,6 @@ public class CatalogFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
         }
     }
-
     private void onOtherClick(View view) {
         ListFragment.category = Categories.OtherObjects;
         try {
@@ -104,7 +100,6 @@ public class CatalogFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
         }
     }
-
     private void onUrbanClick(View view) {
         ListFragment.category = Categories.UrbanObjects;
         try {
@@ -113,14 +108,10 @@ public class CatalogFragment extends Fragment {
             NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
         }
     }
-
     private void onNaturalClick(View view) {
         ListFragment.category = Categories.NaturalObjects;
         try {
             NavHostFragment.findNavController(this).navigate(R.id.nav_list);
         }catch (Exception e){
             NavHostFragment.findNavController(this).navigate(R.id.nav_list_route);
-        }
-    }
-
-}
+        }}}
